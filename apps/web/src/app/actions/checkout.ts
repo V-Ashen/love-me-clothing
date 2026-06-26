@@ -1,5 +1,5 @@
 'use server';
-import { db } from 'shared/src/firebase/config.js';
+import { db } from 'shared';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import sgMail from '@sendgrid/mail';
 

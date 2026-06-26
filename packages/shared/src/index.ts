@@ -1,2 +1,2 @@
-export * from './types/index.js';
-export * from './firebase/config.js';
+export * from './types/index';
+export * from './firebase/config';
