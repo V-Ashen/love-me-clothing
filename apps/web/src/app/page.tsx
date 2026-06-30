@@ -36,72 +36,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 2. Shop by Categories */}
-      <section className="container mx-auto px-6 lg:px-12 py-24">
-        <div className="flex flex-col items-center mb-16 text-center">
-          <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-4">Shop by Categories</h2>
-          <p className="text-gray-500 font-medium">Explore comfort your way - shop by what you need most.</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { title: "Tops", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=1000", link: "/products?category=tops" },
-            { title: "Outerwear", img: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&q=80&w=1000", link: "/products?category=outerwear" },
-            { title: "Bottoms", img: "https://images.unsplash.com/photo-1509319117193-57bab727e09d?auto=format&fit=crop&q=80&w=1000", link: "/products?category=bottoms" },
-          ].map((cat, i) => (
-            <Link href={cat.link} key={i} className="group flex flex-col items-center">
-              <div className="relative w-full aspect-[4/3] overflow-hidden mb-6 bg-gray-100">
-                <Image src={cat.img} alt={cat.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-              </div>
-              <span className="text-gray-900 text-lg font-semibold tracking-wide">{cat.title}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* 3. Product Grid */}
-      <section id="products" className="bg-gray-50 py-24">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="flex flex-col items-center mb-16">
-            <h2 className="text-4xl font-extrabold text-brand-dark uppercase tracking-widest mb-4">Latest Arrivals</h2>
-            <div className="w-24 h-1 bg-brand-accent"></div>
-          </div>
-
-          {products.length === 0 ? (
-            <div className="text-center py-20 text-gray-500 text-lg">
-              No products available yet. Check back soon!
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {products.map(product => (
-                <Link href={`/products/${product.id}`} key={product.id} className="group block">
-                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-white mb-6">
-                    {product.images && product.images[0] ? (
-                      <Image 
-                        src={product.images[0].url} 
-                        alt={product.name} 
-                        fill
-                        className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110" 
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-gray-400 bg-gray-100">No Image</div>
-                    )}
-                    {/* Subtle overlay on hover */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
-                  </div>
-                  <div className="text-center">
-                    <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-2 line-clamp-1 group-hover:text-brand-accent transition-colors">
-                      {product.name}
-                    </h3>
-                    <p className="text-base text-gray-600 font-medium">LKR {product.price.toFixed(2)}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* 4. Benefits / Trust Strip */}
+       {/* 4. Benefits / Trust Strip */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           
@@ -145,6 +80,139 @@ export default async function HomePage() {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* 2. Shop by Categories */}
+      <section className="container mx-auto px-6 lg:px-12 py-24">
+        <div className="flex flex-col items-center mb-16 text-center">
+          <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-4">Shop by Categories</h2>
+          <p className="text-gray-500 font-medium">Explore comfort your way - shop by what you need most.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { title: "Tops", img: "/top.jpg", link: "/products?category=tops" },
+            { title: "Outerwear", img: "/outerwear.jpg", link: "/products?category=outerwear" },
+            { title: "Bottoms", img: "/bottom.jpg", link: "/products?category=bottoms" },
+          ].map((cat, i) => (
+            <Link href={cat.link} key={i} className="group flex flex-col items-center">
+              <div className="relative w-full aspect-[4/3] overflow-hidden mb-6 bg-gray-100">
+                <Image src={cat.img} alt={cat.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+              </div>
+              <span className="text-gray-900 text-lg font-semibold tracking-wide">{cat.title}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. Our Most Loved Picks */}
+      <section id="products" className="bg-white py-24">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex flex-col items-center mb-16 text-center">
+            <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-4">Our Most Loved Picks</h2>
+            <p className="text-gray-500 font-medium">Discover the products customers can't stop buying</p>
+          </div>
+
+          {products.length === 0 ? (
+            <div className="text-center py-20 text-gray-500 text-lg">
+              No products available yet. Check back soon!
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {(products.some(p => p.featured) ? products.filter(p => p.featured) : products).slice(0, 4).map((product, idx) => (
+                <div key={product.id} className="group flex flex-col">
+                  <Link href={`/products/${product.id}`} className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100 mb-4 block">
+                    {idx === 3 && (
+                      <span className="absolute top-3 right-3 z-10 bg-yellow-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
+                        Best Seller
+                      </span>
+                    )}
+                    {product.images && product.images[0] ? (
+                      <Image 
+                        src={product.images[0].url} 
+                        alt={product.name} 
+                        fill
+                        className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105" 
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-gray-400 bg-gray-100">No Image</div>
+                    )}
+                  </Link>
+                  <Link href={`/products/${product.id}`}>
+                    <h3 className="text-sm font-medium text-gray-500 mb-1 truncate group-hover:text-black transition-colors">
+                      {product.name}
+                    </h3>
+                  </Link>
+                  <p className="text-lg text-black font-bold mb-4">LKR {product.price.toFixed(2)}</p>
+                  
+                  <button className="flex items-center justify-center gap-2 w-full border border-gray-200 rounded-full py-3 text-sm font-semibold text-gray-900 hover:bg-black hover:text-white hover:border-black transition-all duration-300 group/btn">
+                    Add to Cart 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500 group-hover/btn:text-white transition-colors"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Carousel Navigation Arrows */}
+          <div className="flex justify-center gap-4 mt-12">
+            <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-black hover:border-black transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-black hover:border-black transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Promotional Banner */}
+      <section className="bg-black py-20 overflow-hidden">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Left Content */}
+            <div className="max-w-xl">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white leading-tight mb-6">
+                Indulge in Our wide<br />leg pant Collection
+              </h2>
+              <p className="text-gray-400 text-sm md:text-base mb-10 leading-relaxed font-medium max-w-md">
+                Experience the perfect blend of elegance and comfort with premium fabrics crafted for those who appreciate sophistication in every detail.
+              </p>
+              <Link href="/products?category=bottoms" className="inline-block bg-white text-black px-8 py-3 rounded-full font-bold text-sm hover:bg-gray-200 transition-colors">
+                Shop Now
+              </Link>
+            </div>
+
+            {/* Right Image Collage */}
+            <div className="grid grid-cols-3 grid-rows-2 gap-4 h-[300px] sm:h-[450px]">
+              <div className="col-span-2 row-span-2 relative rounded-[32px] overflow-hidden">
+                <Image 
+                  src="/promo-1.png" 
+                  alt="Wide leg pants collection" 
+                  fill 
+                  className="object-cover" 
+                />
+              </div>
+              <div className="col-span-1 row-span-1 relative rounded-[24px] overflow-hidden">
+                <Image 
+                  src="/promo-2.png" 
+                  alt="Light color pants" 
+                  fill 
+                  className="object-cover" 
+                />
+              </div>
+              <div className="col-span-1 row-span-1 relative rounded-[24px] overflow-hidden">
+                <Image 
+                  src="/promo-3.png" 
+                  alt="Colorful fabrics" 
+                  fill 
+                  className="object-cover" 
+                />
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 

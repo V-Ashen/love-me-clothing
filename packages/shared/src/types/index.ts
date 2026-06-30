@@ -10,7 +10,13 @@ export interface Product {
   id?: string;
   name: string;
   price: number;
-  images: { public_id: string; url: string }[];
+  description?: string;
+  category?: 'Top' | 'Bottom' | 'Outerwear';
+  subCategory?: string;
+  stock?: number;
+  featured?: boolean;
+  status?: 'ACTIVE' | 'DRAFT';
+  images: { publicId: string; url: string }[];
 }
 
 export interface Order {
