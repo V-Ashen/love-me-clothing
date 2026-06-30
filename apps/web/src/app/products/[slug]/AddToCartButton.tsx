@@ -20,7 +20,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
   return (
     <button 
       onClick={handleAdd}
-      className="w-full rounded-full bg-brand-accent px-8 py-4 text-lg font-semibold text-white shadow-md transition-transform hover:scale-105 active:scale-95"
+      className="w-full bg-brand-dark px-8 py-5 text-lg font-bold uppercase tracking-widest text-white transition-all hover:bg-black active:scale-[0.98] shadow-xl hover:shadow-2xl"
     >
       Add to Cart
     </button>

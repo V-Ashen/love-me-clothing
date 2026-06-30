@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from 'shared';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -11,18 +11,34 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const setCookieAndRedirect = () => {
+    document.cookie = "session=active; path=/; max-age=86400;";
+    router.push('/');
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // For basic middleware protection, we set a dummy session cookie.
-      // In a real production app, use Firebase Admin SDK to verify the token and set a secure session cookie.
-      document.cookie = "session=active; path=/; max-age=86400;";
+      setCookieAndRedirect();
       toast.success('Logged in successfully');
-      router.push('/');
-    } catch (error) {
-      toast.error('Invalid credentials');
+    } catch (error: any) {
+      toast.error(error.message || 'Invalid credentials');
+    }
+    setLoading(false);
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) return toast.error('Please enter email and password');
+    setLoading(true);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      setCookieAndRedirect();
+      toast.success('Admin account created successfully!');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to create account');
     }
     setLoading(false);
   };
@@ -42,19 +58,30 @@ export default function LoginPage() {
           />
           <input 
             type="password" 
-            placeholder="Password" 
+            placeholder="Password (min 6 chars)" 
             value={password}
             onChange={e => setPassword(e.target.value)}
             className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-brand-dark outline-none"
             required 
+            minLength={6}
           />
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="w-full bg-brand-dark text-white p-3 rounded-lg font-semibold hover:bg-black transition-colors"
-          >
-            {loading ? 'Authenticating...' : 'Sign In'}
-          </button>
+          <div className="flex gap-4 pt-2">
+            <button 
+              type="submit" 
+              disabled={loading}
+              className="w-full bg-brand-dark text-white p-3 rounded-lg font-semibold hover:bg-black transition-colors"
+            >
+              {loading ? 'Authenticating...' : 'Sign In'}
+            </button>
+            <button 
+              type="button" 
+              onClick={handleSignup}
+              disabled={loading}
+              className="w-full bg-gray-100 text-gray-800 p-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+            >
+              Register
+            </button>
+          </div>
         </form>
       </div>
     </div>

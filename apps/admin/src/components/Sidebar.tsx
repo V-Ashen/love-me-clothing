@@ -3,10 +3,12 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { auth } from 'shared';
+import { useAdminStore } from '../lib/store';
 
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const isTaskActive = useAdminStore((state) => state.isTaskActive);
 
   if (pathname === '/login') return null;
 
@@ -41,9 +43,11 @@ export default function Sidebar() {
       </nav>
       <button 
         onClick={handleLogout}
-        className="text-left px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors"
+        disabled={isTaskActive}
+        title={isTaskActive ? "Cannot sign out during an active task" : ""}
+        className={`text-left px-4 py-2 text-sm transition-colors ${isTaskActive ? 'text-gray-600 cursor-not-allowed' : 'text-gray-400 hover:text-white'}`}
       >
-        Log out
+        {isTaskActive ? 'Task in progress...' : 'Log out'}
       </button>
     </aside>
   );

@@ -1,28 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@source "../../components";
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 245, 245, 245;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 26, 26, 26;
-    --background-end-rgb: 0, 0, 0;
-  }
+@theme {
+  --color-brand-light: #ffffff;
+  --color-brand-dark: #111111;
+  --color-brand-accent: #ff3366;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: var(--color-brand-light);
+  color: var(--color-brand-dark);
   min-height: 100vh;
 }

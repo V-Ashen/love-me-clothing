@@ -14,14 +14,20 @@ export async function placeCodOrder(orderData: any) {
       createdAt: serverTimestamp(),
     });
 
-    // Send confirmation email
-    await sgMail.send({
-      to: orderData.customerDetails.email,
-      from: 'hello@lovemeclothing.com',
-      subject: `Order Confirmation - #${docRef.id}`,
-      html: `<h2>Thanks for your COD order!</h2>
-             <p>We will dispatch it shortly.</p>`,
-    });
+    // Send confirmation email if SendGrid is configured
+    if (process.env.SENDGRID_API_KEY) {
+      try {
+        await sgMail.send({
+          to: orderData.customerDetails.email,
+          from: process.env.SENDGRID_VERIFIED_SENDER || 'hello@lovemeclothing.com', // Must be a verified sender in SendGrid
+          subject: `Order Confirmation - #${docRef.id}`,
+          html: `<h2>Thanks for your COD order!</h2>
+                 <p>We will dispatch it shortly.</p>`,
+        });
+      } catch (emailError) {
+        console.error("Failed to send email, but order was saved", emailError);
+      }
+    }
 
     return { success: true };
   } catch (error) {

@@ -61,7 +61,7 @@ export default function CheckoutPage() {
           <div className="mt-8 pt-6 border-t">
             <div className="flex justify-between text-lg font-bold mb-6">
               <span>Total to Pay (COD)</span>
-              <span>${getTotalPrice().toFixed(2)}</span>
+              <span>LKR {getTotalPrice().toFixed(2)}</span>
             </div>
             <button type="submit" disabled={loading} className="w-full bg-brand-accent text-white py-4 rounded-full font-bold text-lg hover:bg-red-600 transition-colors disabled:opacity-50">
               {loading ? 'Processing Order...' : 'Place COD Order'}

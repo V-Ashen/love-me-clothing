@@ -39,7 +39,7 @@ export default function CartPage() {
                 </div>
               </div>
               <div className="flex items-center gap-6">
-                <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+                <span className="font-medium">LKR {(item.price * item.quantity).toFixed(2)}</span>
                 <button 
                   onClick={() => removeItem(item.productId)}
                   className="text-red-500 text-sm font-medium hover:underline"
@@ -52,7 +52,7 @@ export default function CartPage() {
         </ul>
         <div className="p-6 bg-gray-50 border-t flex flex-col sm:flex-row items-center justify-between">
           <div className="text-lg font-medium text-gray-900">
-            Total ({getTotalItems()} items): <span className="font-bold">${getTotalPrice().toFixed(2)}</span>
+            Total ({getTotalItems()} items): <span className="font-bold">LKR {getTotalPrice().toFixed(2)}</span>
           </div>
           <Link href="/checkout" className="mt-4 sm:mt-0 px-8 py-3 bg-brand-dark text-white rounded-full font-semibold hover:bg-black transition-colors">
             Proceed to Checkout
