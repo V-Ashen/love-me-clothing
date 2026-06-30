@@ -2,6 +2,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db, Product } from 'shared';
 import Link from 'next/link';
 import Image from 'next/image';
+import NewArrivals from '../components/NewArrivals';
 
 export const revalidate = 60; 
 
@@ -216,15 +217,35 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 5. Newsletter Signup */}
-      <section className="bg-brand-dark py-24 text-center">
-        <div className="container mx-auto px-6 max-w-2xl">
-          <h2 className="text-3xl font-extrabold text-white uppercase tracking-widest mb-4">Join The Club</h2>
-          <p className="text-gray-400 mb-8 font-medium">Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
-          <form className="flex flex-col sm:flex-row gap-4">
-            <input type="email" placeholder="Enter your email" required className="flex-1 bg-white px-6 py-4 rounded-full text-black outline-none focus:ring-2 focus:ring-brand-accent" />
-            <button type="submit" className="bg-brand-accent text-white font-bold uppercase tracking-widest px-8 py-4 rounded-full hover:bg-red-500 transition-colors">Subscribe</button>
-          </form>
+      {/* 5. New Arrivals */}
+      <NewArrivals products={products} />
+
+      {/* 6. Yellow Promo Banner */}
+      <section className="bg-[#E8C222] pt-16 overflow-hidden">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+            
+            <div className="max-w-xl z-10 pb-16">
+              <h2 className="text-4xl md:text-5xl lg:text-[54px] font-medium text-black leading-[1.1] tracking-tight mb-4">
+                Blending Tradition With Love <br/> For <span className="text-white">Pure Cotton</span>
+              </h2>
+              <p className="text-black text-base md:text-lg mb-8 font-medium">
+                AF Weaving creates comfort you can truly feel.
+              </p>
+              <Link href="/products" className="inline-block bg-black text-white px-10 py-3.5 rounded-full font-bold text-sm hover:bg-gray-800 transition-colors">
+                Shop Now
+              </Link>
+            </div>
+
+            <div className="relative w-full md:w-[400px] h-[300px] md:h-[400px] bg-white rounded-[32px] shadow-2xl p-8 transform md:rotate-3 hover:rotate-0 transition-transform duration-500 z-10 mb-8 md:mb-0">
+              <Image 
+                src="/denims.png" 
+                alt="Stack of denims" 
+                fill 
+                className="object-contain p-6" 
+              />
+            </div>
+          </div>
         </div>
       </section>
     </main>
