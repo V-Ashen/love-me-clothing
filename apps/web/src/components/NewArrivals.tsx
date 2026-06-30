@@ -48,7 +48,13 @@ export default function NewArrivals({ products }: { products: Product[] }) {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {displayProducts.map((product) => (
+            {displayProducts.map((product) => {
+              const isDiscounted = !!product.discountPercentage && product.discountPercentage > 0;
+              const discountedPrice = isDiscounted 
+                ? product.price * (1 - (product.discountPercentage! / 100)) 
+                : product.price;
+
+              return (
               <div key={product.id} className="group flex flex-col relative bg-white border border-gray-50 rounded-2xl p-4 hover:shadow-xl hover:shadow-gray-100/50 transition-all duration-300">
                 {/* Image Container */}
                 <Link href={`/products/${product.id}`} className="relative aspect-square w-full overflow-hidden bg-gray-50 rounded-xl mb-4 flex items-center justify-center group/img">
@@ -72,6 +78,13 @@ export default function NewArrivals({ products }: { products: Product[] }) {
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-gray-300 bg-gray-50">No Image</div>
                   )}
+                  
+                  {/* Discount Badge */}
+                  {isDiscounted && (
+                    <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-extrabold px-2 py-1 rounded-full uppercase tracking-widest shadow-md z-10">
+                      -{product.discountPercentage}%
+                    </div>
+                  )}
                 </Link>
 
                 {/* Details */}
@@ -81,8 +94,11 @@ export default function NewArrivals({ products }: { products: Product[] }) {
                     {product.name}
                   </h3>
                 </Link>
-                <div className="flex items-center justify-between mt-1 mb-4">
-                  <p className="text-sm text-black font-extrabold">LKR {product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <div className="flex items-center gap-2 mt-1 mb-4">
+                  <p className="text-sm text-black font-extrabold">LKR {discountedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  {isDiscounted && (
+                    <p className="text-xs text-red-500 font-bold line-through">LKR {product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  )}
                 </div>
                 
                 {/* Add to Cart Button */}
@@ -91,7 +107,8 @@ export default function NewArrivals({ products }: { products: Product[] }) {
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500 group-hover/btn:text-white transition-colors"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
                 </button>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
 

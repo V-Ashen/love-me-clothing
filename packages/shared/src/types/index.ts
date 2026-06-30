@@ -6,17 +6,33 @@ export interface User {
   role: Role;
 }
 
+export interface ProductVariant {
+  color: string;
+  size: string;
+  stock: number;
+}
+
+export interface ProductColorImage {
+  color: string;
+  images: { publicId: string; url: string }[];
+}
+
 export interface Product {
   id?: string;
   name: string;
   price: number;
+  discountPercentage?: number;
   description?: string;
   category?: 'Top' | 'Bottom' | 'Outerwear';
   subCategory?: string;
-  stock?: number;
+  stock?: number; // Kept for backward compatibility or simple products
+  colors?: string[];
+  sizes?: string[];
+  variants?: ProductVariant[];
+  colorImages?: ProductColorImage[];
   featured?: boolean;
   status?: 'ACTIVE' | 'DRAFT';
-  images: { publicId: string; url: string }[];
+  images: { publicId: string; url: string }[]; // Default images or legacy images
 }
 
 export interface Order {
