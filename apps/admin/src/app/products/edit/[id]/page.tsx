@@ -23,11 +23,13 @@ export default function EditProduct() {
   const [category, setCategory] = useState<'Top' | 'Bottom' | 'Outerwear'>('Top');
   const [subCategory, setSubCategory] = useState('');
   const [status, setStatus] = useState<'ACTIVE' | 'DRAFT'>('ACTIVE');
+  const [tags, setTags] = useState('');
   
   // Variants State
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [variantStock, setVariantStock] = useState<Record<string, number>>({});
+  const [variantPrice, setVariantPrice] = useState<Record<string, number>>({});
   const [colorFiles, setColorFiles] = useState<Record<string, File>>({});
   const [existingColorImages, setExistingColorImages] = useState<any[]>([]);
   
@@ -62,6 +64,7 @@ export default function EditProduct() {
           setCategory(data.category || 'Top');
           setSubCategory(data.subCategory || '');
           setStatus(data.status || 'ACTIVE');
+          setTags(data.tags ? data.tags.join(', ') : '');
           
           if (data.images && data.images.length > 0) {
             setExistingImageUrl(data.images[0].url);
@@ -74,10 +77,15 @@ export default function EditProduct() {
           
           if (data.variants) {
             const stockMap: Record<string, number> = {};
+            const priceMap: Record<string, number> = {};
             data.variants.forEach((v: any) => {
               stockMap[`${v.color}-${v.size}`] = v.stock;
+              if (v.price !== undefined) {
+                priceMap[`${v.color}-${v.size}`] = v.price;
+              }
             });
             setVariantStock(stockMap);
+            setVariantPrice(priceMap);
           } else if (data.stock) {
             // Legacy product fallback, just store it but UI might be weird if colors/sizes empty
           }
@@ -101,6 +109,7 @@ export default function EditProduct() {
     setSubCategory('');
     setSelectedSizes([]);
     setVariantStock({});
+    setVariantPrice({});
   };
 
   const handleColorToggle = (color: string) => {
@@ -109,10 +118,15 @@ export default function EditProduct() {
       if (isSelected) {
         const newColors = prev.filter(c => c !== color);
         const newStock = { ...variantStock };
+        const newPrice = { ...variantPrice };
         Object.keys(newStock).forEach(key => {
-          if (key.startsWith(`${color}-`)) delete newStock[key];
+          if (key.startsWith(`${color}-`)) {
+            delete newStock[key];
+            delete newPrice[key];
+          }
         });
         setVariantStock(newStock);
+        setVariantPrice(newPrice);
         
         const newFiles = { ...colorFiles };
         delete newFiles[color];
@@ -130,10 +144,15 @@ export default function EditProduct() {
       if (isSelected) {
         const newSizes = prev.filter(s => s !== size);
         const newStock = { ...variantStock };
+        const newPrice = { ...variantPrice };
         Object.keys(newStock).forEach(key => {
-          if (key.endsWith(`-${size}`)) delete newStock[key];
+          if (key.endsWith(`-${size}`)) {
+            delete newStock[key];
+            delete newPrice[key];
+          }
         });
         setVariantStock(newStock);
+        setVariantPrice(newPrice);
         return newSizes;
       } else {
         return [...prev, size];
@@ -194,7 +213,8 @@ export default function EditProduct() {
       for (const color of selectedColors) {
         for (const size of selectedSizes) {
           const stockVal = variantStock[`${color}-${size}`] || 0;
-          variants.push({ color, size, stock: stockVal });
+          const priceVal = variantPrice[`${color}-${size}`];
+          variants.push({ color, size, stock: stockVal, price: priceVal !== undefined ? priceVal : parseFloat(price) });
           totalStock += stockVal;
         }
       }
@@ -205,6 +225,7 @@ export default function EditProduct() {
         price: parseFloat(price),
         discountPercentage: parseFloat(discountPercentage) || 0,
         description,
+        tags: tags.split(',').map(t => t.trim()).filter(Boolean),
         category,
         subCategory,
         colors: selectedColors,
@@ -334,6 +355,17 @@ export default function EditProduct() {
           </div>
           
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Search Tags (SEO)</label>
+            <input 
+              type="text" 
+              value={tags} 
+              onChange={(e) => setTags(e.target.value)} 
+              placeholder="e.g. summer, dress, casual (comma separated)"
+              className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-brand-dark outline-none"
+            />
+          </div>
+          
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Update Default Image (Optional)</label>
             {existingImageUrl && !file && (
               <img src={existingImageUrl} alt="Current" className="w-24 h-24 object-cover rounded-lg border mb-4" />
@@ -427,6 +459,7 @@ export default function EditProduct() {
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Color</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price (LKR)</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
                     </tr>
                   </thead>
@@ -438,6 +471,17 @@ export default function EditProduct() {
                           <tr key={key}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{color}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{size}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <input 
+                                type="number" 
+                                min="0"
+                                step="0.01"
+                                value={variantPrice[key] !== undefined ? variantPrice[key] : price}
+                                onChange={(e) => setVariantPrice(prev => ({ ...prev, [key]: parseFloat(e.target.value) || 0 }))}
+                                placeholder={price || '0'}
+                                className="border p-2 rounded-lg w-24 outline-none focus:border-brand-dark focus:ring-1 focus:ring-brand-dark"
+                              />
+                            </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <input 
                                 type="number" 

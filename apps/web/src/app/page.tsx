@@ -24,11 +24,11 @@ export default async function HomePage() {
           />
           <div className="absolute inset-0 bg-black/40"></div> {/* Dark gradient overlay for text readability */}
         </div>
-        <div className="relative z-10 text-center px-4 flex flex-col items-center max-w-4xl">
-          <h1 className="text-5xl md:text-7xl font-semibold text-white tracking-wide mb-6">
+        <div className="relative z-10 text-center px-4 flex flex-col items-center max-w-4xl mt-12 sm:mt-0">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-semibold text-white tracking-wide mb-4 sm:mb-6 leading-tight">
             New Collection
           </h1>
-          <p className="text-lg md:text-xl text-gray-200 mb-10 font-medium">
+          <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-8 sm:mb-10 font-medium px-4">
             Elevate Your Wardrobe With Our Latest Arrivals.<br />Curated For The Modern Individual.
           </p>
           <a href="#products" className="bg-white text-black px-8 py-3 rounded-full font-bold text-sm tracking-wide hover:bg-gray-100 hover:scale-105 transition-all shadow-xl">
@@ -121,8 +121,8 @@ export default async function HomePage() {
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {(products.some(p => p.featured) ? products.filter(p => p.featured) : products).slice(0, 4).map((product, idx) => (
-                <div key={product.id} className="group flex flex-col">
-                  <Link href={`/products/${product.id}`} className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100 mb-4 block">
+                <Link href={`/products/${product.id}`} key={product.id} className="group flex flex-col">
+                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100 mb-4 block">
                     {idx === 3 && (
                       <span className="absolute top-3 right-3 z-10 bg-yellow-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
                         Best Seller
@@ -138,19 +138,19 @@ export default async function HomePage() {
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-gray-400 bg-gray-100">No Image</div>
                     )}
-                  </Link>
-                  <Link href={`/products/${product.id}`}>
+                  </div>
+                  <div>
                     <h3 className="text-sm font-medium text-gray-500 mb-1 truncate group-hover:text-black transition-colors">
                       {product.name}
                     </h3>
-                  </Link>
+                  </div>
                   <p className="text-lg text-black font-bold mb-4">LKR {product.price.toFixed(2)}</p>
                   
-                  <button className="flex items-center justify-center gap-2 w-full border border-gray-200 rounded-full py-3 text-sm font-semibold text-gray-900 hover:bg-black hover:text-white hover:border-black transition-all duration-300 group/btn">
+                  <div className="flex items-center justify-center gap-2 w-full border border-gray-200 rounded-full py-3 text-sm font-semibold text-gray-900 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all duration-300">
                     Add to Cart 
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500 group-hover/btn:text-white transition-colors"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                  </button>
-                </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500 transition-colors"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                  </div>
+                </Link>
               ))}
             </div>
           )}
@@ -173,11 +173,11 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
             {/* Left Content */}
-            <div className="max-w-xl">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white leading-tight mb-6">
-                Indulge in Our wide<br />leg pant Collection
+            <div className="max-w-xl text-center lg:text-left">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium text-white leading-tight mb-4 sm:mb-6">
+                Indulge in Our wide<br className="hidden sm:block" />leg pant Collection
               </h2>
-              <p className="text-gray-400 text-sm md:text-base mb-10 leading-relaxed font-medium max-w-md">
+              <p className="text-gray-400 text-sm md:text-base mb-8 sm:mb-10 leading-relaxed font-medium max-w-md mx-auto lg:mx-0">
                 Experience the perfect blend of elegance and comfort with premium fabrics crafted for those who appreciate sophistication in every detail.
               </p>
               <Link href="/products?category=bottoms" className="inline-block bg-white text-black px-8 py-3 rounded-full font-bold text-sm hover:bg-gray-200 transition-colors">
@@ -225,11 +225,11 @@ export default async function HomePage() {
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
             
-            <div className="max-w-xl z-10 pb-16">
-              <h2 className="text-4xl md:text-5xl lg:text-[54px] font-medium text-black leading-[1.1] tracking-tight mb-4">
-                Blending Tradition With Love <br/> For <span className="text-white">Pure Cotton</span>
+            <div className="max-w-xl z-10 pb-8 sm:pb-16 text-center md:text-left">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-medium text-black leading-[1.1] tracking-tight mb-4">
+                Blending Tradition With Love <br className="hidden sm:block"/> For <span className="text-white">Pure Cotton</span>
               </h2>
-              <p className="text-black text-base md:text-lg mb-8 font-medium">
+              <p className="text-black text-sm sm:text-base md:text-lg mb-8 font-medium">
                 AF Weaving creates comfort you can truly feel.
               </p>
               <Link href="/products" className="inline-block bg-black text-white px-10 py-3.5 rounded-full font-bold text-sm hover:bg-gray-800 transition-colors">

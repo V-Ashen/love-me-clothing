@@ -10,6 +10,7 @@ export interface ProductVariant {
   color: string;
   size: string;
   stock: number;
+  price?: number;
 }
 
 export interface ProductColorImage {
@@ -33,6 +34,7 @@ export interface Product {
   featured?: boolean;
   status?: 'ACTIVE' | 'DRAFT';
   images: { publicId: string; url: string }[]; // Default images or legacy images
+  tags?: string[];
 }
 
 export interface Order {

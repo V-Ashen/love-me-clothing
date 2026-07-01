@@ -55,9 +55,9 @@ export default function NewArrivals({ products }: { products: Product[] }) {
                 : product.price;
 
               return (
-              <div key={product.id} className="group flex flex-col relative bg-white border border-gray-50 rounded-2xl p-4 hover:shadow-xl hover:shadow-gray-100/50 transition-all duration-300">
+              <Link href={`/products/${product.id}`} key={product.id} className="group flex flex-col relative bg-white border border-gray-50 rounded-2xl p-4 hover:shadow-xl hover:shadow-gray-100/50 transition-all duration-300">
                 {/* Image Container */}
-                <Link href={`/products/${product.id}`} className="relative aspect-square w-full overflow-hidden bg-gray-50 rounded-xl mb-4 flex items-center justify-center group/img">
+                <div className="relative aspect-square w-full overflow-hidden bg-gray-50 rounded-xl mb-4 flex items-center justify-center group/img">
                   {/* Action Icons (Heart & Eye) */}
                   <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover/img:opacity-100 translate-x-4 group-hover/img:translate-x-0 transition-all duration-300 z-10">
                     <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-400 hover:text-yellow-500 shadow-sm transition-colors">
@@ -85,15 +85,15 @@ export default function NewArrivals({ products }: { products: Product[] }) {
                       -{product.discountPercentage}%
                     </div>
                   )}
-                </Link>
+                </div>
 
                 {/* Details */}
-                <Link href={`/products/${product.id}`} className="mt-auto">
+                <div className="mt-auto">
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 line-clamp-1">{product.subCategory || product.category || 'PRODUCT'}</p>
                   <h3 className="text-sm font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-brand-dark transition-colors">
                     {product.name}
                   </h3>
-                </Link>
+                </div>
                 <div className="flex items-center gap-2 mt-1 mb-4">
                   <p className="text-sm text-black font-extrabold">LKR {discountedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                   {isDiscounted && (
@@ -102,11 +102,11 @@ export default function NewArrivals({ products }: { products: Product[] }) {
                 </div>
                 
                 {/* Add to Cart Button */}
-                <button className="flex items-center justify-center gap-2 w-full border border-gray-200 rounded-full py-2.5 text-xs font-bold text-gray-900 hover:bg-black hover:text-white hover:border-black transition-all duration-300 group/btn">
+                <div className="flex items-center justify-center gap-2 w-full border border-gray-200 rounded-full py-2.5 text-xs font-bold text-gray-900 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all duration-300">
                   Add to Cart 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500 group-hover/btn:text-white transition-colors"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                </button>
-              </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500 transition-colors"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                </div>
+              </Link>
               );
             })}
           </div>

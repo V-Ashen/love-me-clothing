@@ -21,7 +21,7 @@ export default function Footer() {
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex gap-8">
+          <nav className="flex flex-wrap gap-4 md:gap-8">
             <Link href="/" className="text-sm font-semibold hover:text-gray-300 transition-colors">Home</Link>
             <Link href="/products" className="text-sm font-semibold hover:text-gray-300 transition-colors">Shop</Link>
             <Link href="/about" className="text-sm font-semibold hover:text-gray-300 transition-colors">About</Link>
@@ -30,7 +30,7 @@ export default function Footer() {
         </div>
 
         {/* Middle Section */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-10">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-10 mb-10">
           <p className="text-gray-400 text-sm font-medium">
             "Bringing you the finest handloom products since 1985."
           </p>

@@ -9,98 +9,209 @@ export default function Navbar() {
   const { getTotalItems } = useCart();
   const [mounted, setMounted] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileShopOpen, setMobileShopOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setMobileShopOpen(false);
+  }, [pathname]);
+
   return (
-    <header className="absolute top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl">
-      <div className="bg-black text-white rounded-full shadow-2xl h-[72px] flex items-center justify-between px-8 md:px-10 border border-gray-800">
-        
-        {/* Left: Navigation Links */}
-        <nav className="flex flex-1 items-center gap-6 lg:gap-8 text-sm font-semibold tracking-wide">
-          <Link href="/" className={`${pathname === '/' ? 'text-[#E8C222]' : 'text-gray-300 hover:text-white'} transition-colors capitalize`}>
-            Home
-          </Link>
-          <div 
-            className="relative flex items-center h-full cursor-pointer py-4"
-            onMouseEnter={() => setIsMegaMenuOpen(true)}
-            onMouseLeave={() => setIsMegaMenuOpen(false)}
-          >
-            <Link href="/products" className={`${pathname === '/products' ? 'text-[#E8C222]' : 'text-gray-300 hover:text-white'} transition-colors capitalize flex items-center gap-1`}>
-              Shop
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${isMegaMenuOpen ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6"/></svg>
+    <>
+      <header className="absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-7xl">
+        <div className="bg-black text-white rounded-full shadow-2xl h-[64px] sm:h-[72px] flex items-center justify-between px-6 md:px-10 border border-gray-800">
+          
+          {/* Left: Hamburger (Mobile) / Navigation Links (Desktop) */}
+          <div className="flex flex-1 items-center">
+            {/* Mobile Hamburger Icon */}
+            <button 
+              className="lg:hidden text-white p-2 -ml-2"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+
+            {/* Desktop Navigation Links */}
+            <nav className="hidden lg:flex items-center gap-6 lg:gap-8 text-sm font-semibold tracking-wide">
+              <Link href="/" className={`${pathname === '/' ? 'text-[#E8C222]' : 'text-gray-300 hover:text-white'} transition-colors capitalize`}>
+                Home
+              </Link>
+              <div 
+                className="relative flex items-center h-full cursor-pointer py-4"
+                onMouseEnter={() => setIsMegaMenuOpen(true)}
+                onMouseLeave={() => setIsMegaMenuOpen(false)}
+              >
+                <Link href="/products" className={`${pathname === '/products' ? 'text-[#E8C222]' : 'text-gray-300 hover:text-white'} transition-colors capitalize flex items-center gap-1`}>
+                  Shop
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${isMegaMenuOpen ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6"/></svg>
+                </Link>
+
+                {/* Mega Menu Dropdown */}
+                {isMegaMenuOpen && (
+                  <div className="absolute top-[60px] -left-10 w-[600px] bg-white border border-gray-100 shadow-2xl rounded-2xl p-8 grid grid-cols-3 gap-8 animate-in slide-in-from-top-2 fade-in duration-200 z-50 text-gray-900 cursor-default">
+                    <div>
+                      <h3 className="text-lg font-bold text-brand-dark mb-4 border-b pb-2">Top</h3>
+                      <ul className="space-y-3 font-medium text-gray-600">
+                        <li><Link href="/products?category=Top&subCategory=over+sized+shirts" className="hover:text-brand-accent transition-colors">Over Sized Shirts</Link></li>
+                        <li><Link href="/products?category=Top&subCategory=over+sized+t+shirts" className="hover:text-brand-accent transition-colors">Over Sized T Shirts</Link></li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-brand-dark mb-4 border-b pb-2">Bottom</h3>
+                      <ul className="space-y-3 font-medium text-gray-600">
+                        <li><Link href="/products?category=Bottom&subCategory=denim" className="hover:text-brand-accent transition-colors">Denim</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=cargo+pants" className="hover:text-brand-accent transition-colors">Cargo Pants</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=jeans" className="hover:text-brand-accent transition-colors">Jeans</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=leg+pants" className="hover:text-brand-accent transition-colors">Leg Pants</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=skirts" className="hover:text-brand-accent transition-colors">Skirts</Link></li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-brand-dark mb-4 border-b pb-2">Outerwear</h3>
+                      <ul className="space-y-3 font-medium text-gray-600">
+                        <li><Link href="/products?category=Outerwear&subCategory=hoodies" className="hover:text-brand-accent transition-colors">Hoodies</Link></li>
+                        <li><Link href="/products?category=Outerwear&subCategory=sweaters" className="hover:text-brand-accent transition-colors">Sweaters</Link></li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <Link href="/about" className={`${pathname === '/about' ? 'text-[#E8C222]' : 'text-gray-300 hover:text-white'} transition-colors capitalize`}>
+                About
+              </Link>
+              <Link href="/contact" className={`${pathname === '/contact' ? 'text-[#E8C222]' : 'text-gray-300 hover:text-white'} transition-colors capitalize`}>
+                Contact
+              </Link>
+            </nav>
+          </div>
+
+          {/* Center: Logo */}
+          <div className="flex-1 flex justify-center">
+            <Link href="/" className="hover:opacity-80 transition-opacity flex items-center gap-2 sm:gap-3">
+              <div className="relative w-8 h-8 sm:w-10 sm:h-10">
+                <Image src="/lovelogo.jpg" alt="Love Me Clothing Logo" fill className="object-contain rounded-full bg-white p-0.5" />
+              </div>
+              <div className="flex flex-col text-white hidden sm:flex">
+                <span className="text-[11px] font-extrabold tracking-widest leading-none uppercase">LOVE ME CLOTHING</span>
+                <span className="text-[8px] font-medium tracking-widest opacity-80 uppercase mt-0.5">Industries (Pvt) Ltd</span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Right: Icons */}
+          <div className="flex flex-1 items-center justify-end gap-4 lg:gap-6 text-gray-300">
+            <Link href="/cart" className="relative flex items-center transition-colors hover:text-[#E8C222]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+              {mounted && getTotalItems() > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#E8C222] text-[10px] text-black font-extrabold animate-in fade-in zoom-in duration-300 shadow-sm">
+                  {getTotalItems()}
+                </span>
+              )}
             </Link>
 
-            {/* Mega Menu Dropdown */}
-            {isMegaMenuOpen && (
-              <div className="absolute top-[60px] -left-10 w-[600px] bg-white border border-gray-100 shadow-2xl rounded-2xl p-8 grid grid-cols-3 gap-8 animate-in slide-in-from-top-2 fade-in duration-200 z-50 text-gray-900 cursor-default">
-                <div>
-                  <h3 className="text-lg font-bold text-brand-dark mb-4 border-b pb-2">Top</h3>
-                  <ul className="space-y-3 font-medium text-gray-600">
-                    <li><Link href="/products?category=Top&subCategory=over+sized+shirts" className="hover:text-brand-accent transition-colors">Over Sized Shirts</Link></li>
-                    <li><Link href="/products?category=Top&subCategory=over+sized+t+shirts" className="hover:text-brand-accent transition-colors">Over Sized T Shirts</Link></li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-brand-dark mb-4 border-b pb-2">Bottom</h3>
-                  <ul className="space-y-3 font-medium text-gray-600">
-                    <li><Link href="/products?category=Bottom&subCategory=denim" className="hover:text-brand-accent transition-colors">Denim</Link></li>
-                    <li><Link href="/products?category=Bottom&subCategory=cargo+pants" className="hover:text-brand-accent transition-colors">Cargo Pants</Link></li>
-                    <li><Link href="/products?category=Bottom&subCategory=jeans" className="hover:text-brand-accent transition-colors">Jeans</Link></li>
-                    <li><Link href="/products?category=Bottom&subCategory=leg+pants" className="hover:text-brand-accent transition-colors">Leg Pants</Link></li>
-                    <li><Link href="/products?category=Bottom&subCategory=skirts" className="hover:text-brand-accent transition-colors">Skirts</Link></li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-brand-dark mb-4 border-b pb-2">Outerwear</h3>
-                  <ul className="space-y-3 font-medium text-gray-600">
-                    <li><Link href="/products?category=Outerwear&subCategory=hoodies" className="hover:text-brand-accent transition-colors">Hoodies</Link></li>
-                    <li><Link href="/products?category=Outerwear&subCategory=sweaters" className="hover:text-brand-accent transition-colors">Sweaters</Link></li>
-                  </ul>
-                </div>
-              </div>
-            )}
+            <Link href="/account" className="hidden lg:block hover:text-[#E8C222] transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </Link>
           </div>
-          <Link href="/about" className={`${pathname === '/about' ? 'text-[#E8C222]' : 'text-gray-300 hover:text-white'} transition-colors capitalize`}>
-            About
-          </Link>
-          <Link href="/contact" className={`${pathname === '/contact' ? 'text-[#E8C222]' : 'text-gray-300 hover:text-white'} transition-colors capitalize`}>
-            Contact
-          </Link>
-        </nav>
-
-        {/* Center: Logo */}
-        <div className="flex-1 flex justify-center">
-          <Link href="/" className="hover:opacity-80 transition-opacity flex items-center gap-3">
-            <div className="relative w-10 h-10">
-              <Image src="/lovelogo.jpg" alt="Love Me Clothing Logo" fill className="object-contain rounded-full bg-white p-0.5" />
-            </div>
-            <div className="flex flex-col text-white hidden sm:flex">
-              <span className="text-[11px] font-extrabold tracking-widest leading-none uppercase">LOVE ME CLOTHING</span>
-              <span className="text-[8px] font-medium tracking-widest opacity-80 uppercase mt-0.5">Industries (Pvt) Ltd</span>
-            </div>
-          </Link>
         </div>
+      </header>
 
-        {/* Right: Icons */}
-        <div className="flex flex-1 items-center justify-end gap-6 text-gray-300">
-          <Link href="/cart" className="relative flex items-center transition-colors hover:text-[#E8C222]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-            {mounted && getTotalItems() > 0 && (
-              <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#E8C222] text-[10px] text-black font-extrabold animate-in fade-in zoom-in duration-300 shadow-sm">
-                {getTotalItems()}
-              </span>
-            )}
-          </Link>
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex lg:hidden">
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-300"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          
+          {/* Sidebar Drawer */}
+          <div className="relative flex w-full max-w-sm flex-col overflow-y-auto bg-brand-light shadow-xl animate-in slide-in-from-left duration-300 ease-out">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-6 border-b border-gray-200">
+              <span className="text-sm font-extrabold uppercase tracking-widest text-brand-dark">Menu</span>
+              <button 
+                className="text-gray-500 hover:text-black p-2 -mr-2 bg-gray-100 rounded-full"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
 
-          <Link href="/account" className="hover:text-[#E8C222] transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </Link>
+            {/* Links */}
+            <nav className="flex flex-col p-6 space-y-6">
+              <Link href="/" className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider">
+                Home
+              </Link>
+              
+              <div>
+                <button 
+                  onClick={() => setMobileShopOpen(!mobileShopOpen)}
+                  className="flex items-center justify-between w-full text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider"
+                >
+                  Shop
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 ${mobileShopOpen ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                
+                {/* Mobile Shop Submenu */}
+                {mobileShopOpen && (
+                  <div className="mt-4 pl-4 border-l-2 border-brand-accent space-y-6 flex flex-col animate-in slide-in-from-top-2 fade-in">
+                    <Link href="/products" className="text-lg font-bold text-brand-dark">Shop All Products</Link>
+                    
+                    <div>
+                      <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Top</p>
+                      <ul className="space-y-3 text-brand-dark font-medium">
+                        <li><Link href="/products?category=Top&subCategory=over+sized+shirts">Over Sized Shirts</Link></li>
+                        <li><Link href="/products?category=Top&subCategory=over+sized+t+shirts">Over Sized T Shirts</Link></li>
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Bottom</p>
+                      <ul className="space-y-3 text-brand-dark font-medium">
+                        <li><Link href="/products?category=Bottom&subCategory=denim">Denim</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=cargo+pants">Cargo Pants</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=jeans">Jeans</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=leg+pants">Leg Pants</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=skirts">Skirts</Link></li>
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Outerwear</p>
+                      <ul className="space-y-3 text-brand-dark font-medium">
+                        <li><Link href="/products?category=Outerwear&subCategory=hoodies">Hoodies</Link></li>
+                        <li><Link href="/products?category=Outerwear&subCategory=sweaters">Sweaters</Link></li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <Link href="/about" className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider">
+                About
+              </Link>
+              <Link href="/contact" className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider">
+                Contact
+              </Link>
+              <Link href="/account" className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider">
+                My Account
+              </Link>
+            </nav>
+
+            {/* Mobile Footer */}
+            <div className="mt-auto p-6 border-t border-gray-200 text-xs font-bold text-gray-400 tracking-widest uppercase text-center">
+              © {new Date().getFullYear()} Love Me Clothing
+            </div>
+          </div>
         </div>
-      </div>
-    </header>
+      )}
+    </>
   );
 }

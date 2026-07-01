@@ -4,6 +4,7 @@ import { Product } from 'shared';
 import Image from 'next/image';
 import { useCart } from '../lib/hooks/useCart';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const COLOR_MAP: Record<string, string> = {
   'Black': '#000000', 'White': '#FFFFFF', 'Gray': '#6b7280', 'Navy': '#1e3a8a', 
@@ -14,6 +15,7 @@ const COLOR_MAP: Record<string, string> = {
 
 export default function ProductDetailsClient({ product, relatedProducts }: { product: Product, relatedProducts?: Product[] }) {
   const { addItem } = useCart();
+  const router = useRouter();
   const hasColors = product.colors && product.colors.length > 0;
   const hasSizes = product.sizes && product.sizes.length > 0;
   
@@ -41,11 +43,22 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
     return product.stock || 0; // fallback for simple products
   }, [selectedColor, selectedSize, product.variants, product.stock]);
 
+  // Current Variant Price
+  const basePrice = useMemo(() => {
+    if (product.variants && selectedColor && selectedSize) {
+      const variant = product.variants.find(v => v.color === selectedColor && v.size === selectedSize);
+      if (variant && variant.price !== undefined) {
+        return variant.price;
+      }
+    }
+    return product.price;
+  }, [selectedColor, selectedSize, product.variants, product.price]);
+
   // Discount calculation
   const isDiscounted = !!product.discountPercentage && product.discountPercentage > 0;
   const discountedPrice = isDiscounted 
-    ? product.price * (1 - (product.discountPercentage! / 100)) 
-    : product.price;
+    ? basePrice * (1 - (product.discountPercentage! / 100)) 
+    : basePrice;
 
   const handleAddToCart = () => {
     if (hasColors && !selectedColor) return toast.error('Please select a color');
@@ -64,7 +77,15 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
   };
 
   return (
-    <div className="container mx-auto px-6 lg:px-12 py-32 max-w-[1400px]">
+    <div className="container mx-auto px-6 lg:px-12 pt-32 pb-12 max-w-[1400px]">
+      <button 
+        onClick={() => router.back()} 
+        className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-black transition-colors mb-8"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Back to Shop
+      </button>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mb-32">
         
         {/* Left: Image Gallery */}
@@ -106,7 +127,7 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
           <div className="flex items-center gap-4 mb-10">
             <span className="text-2xl font-extrabold text-gray-900">LKR {discountedPrice.toFixed(2)}</span>
             {isDiscounted && (
-              <span className="text-sm font-bold text-red-500 line-through">LKR {product.price.toFixed(2)}</span>
+              <span className="text-sm font-bold text-red-500 line-through">LKR {basePrice.toFixed(2)}</span>
             )}
           </div>
 
