@@ -277,14 +277,31 @@ export default function OrdersPage() {
                                         <div>
                                           <div className="font-bold text-sm text-gray-900 line-clamp-1">{item.name}</div>
                                           <div className="text-xs text-gray-500 font-medium mt-0.5">
-                                            {item.color && <span className="mr-2">Color: {item.color}</span>}
-                                            {item.size && <span>Size: {item.size}</span>}
+                                            {(item.color || item.variant?.color) && (
+                                              <span className="mr-2">Color: {item.color || item.variant?.color}</span>
+                                            )}
+                                            {(item.size || item.variant?.size) && (
+                                              <span>Size: {item.size || item.variant?.size}</span>
+                                            )}
                                           </div>
+                                          {((item as any).originalPrice && item.price < (item as any).originalPrice) && (
+                                            <div className="text-[10px] font-bold text-red-500 uppercase tracking-widest mt-1 bg-red-50 inline-block px-1.5 py-0.5 rounded">
+                                              Discount Applied: LKR {((item as any).originalPrice - item.price).toLocaleString(undefined, { minimumFractionDigits: 2 })} off
+                                            </div>
+                                          )}
                                         </div>
                                       </div>
                                       <div className="text-right">
-                                        <div className="font-bold text-sm text-gray-900">LKR {(item.price * item.quantity).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                                        <div className="text-xs text-gray-500 font-medium">Qty: {item.quantity} × {item.price}</div>
+                                        <div className="font-bold text-sm text-gray-900">
+                                          LKR {(item.price * item.quantity).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        </div>
+                                        {((item as any).originalPrice && item.price < (item as any).originalPrice) ? (
+                                          <div className="text-xs text-gray-500 font-medium">
+                                            Qty: {item.quantity} × <span className="line-through text-gray-400">{(item as any).originalPrice}</span> {item.price}
+                                          </div>
+                                        ) : (
+                                          <div className="text-xs text-gray-500 font-medium">Qty: {item.quantity} × {item.price}</div>
+                                        )}
                                       </div>
                                     </div>
                                   ))}

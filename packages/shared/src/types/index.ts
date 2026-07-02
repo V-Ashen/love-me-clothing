@@ -53,9 +53,11 @@ export interface OrderCartItem {
   id: string;
   name: string;
   price: number;
+  originalPrice?: number;
   image?: string;
   size?: string;
   color?: string;
+  variant?: { size: string; color: string };
   quantity: number;
 }
 

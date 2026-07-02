@@ -61,7 +61,7 @@ export default function DashboardPage() {
       ordersSnap.forEach((doc) => {
         const data = doc.data();
         tOrders++;
-        tRevenue += data.total || 0;
+        tRevenue += data.totalAmount || 0;
         if (data.status === 'pending') pOrders++;
         
         // Handle timestamp
@@ -77,7 +77,7 @@ export default function DashboardPage() {
           customerName: data.customerDetails?.firstName 
             ? `${data.customerDetails.firstName} ${data.customerDetails.lastName || ''}` 
             : 'Guest',
-          total: data.total || 0,
+          total: data.totalAmount || 0,
           status: data.status || 'pending',
           createdAt
         });
@@ -86,7 +86,7 @@ export default function DashboardPage() {
         if (createdAt > 0) {
           const dateObj = new Date(createdAt);
           const dateString = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-          dailyRevenue[dateString] = (dailyRevenue[dateString] || 0) + (data.total || 0);
+          dailyRevenue[dateString] = (dailyRevenue[dateString] || 0) + (data.totalAmount || 0);
         }
       });
 
@@ -154,7 +154,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">Total Revenue</p>
-              <h3 className="text-2xl font-extrabold text-gray-900 mt-1">${metrics.totalRevenue.toFixed(2)}</h3>
+              <h3 className="text-2xl font-extrabold text-gray-900 mt-1">LKR {metrics.totalRevenue.toFixed(2)}</h3>
             </div>
           </div>
         </div>
@@ -224,12 +224,13 @@ export default function DashboardPage() {
                   axisLine={false} 
                   tickLine={false} 
                   tick={{ fontSize: 12, fill: '#9ca3af' }}
-                  tickFormatter={(value) => `$${value}`}
+                  tickFormatter={(value) => `LKR ${value}`}
+                  width={80}
                 />
                 <Tooltip 
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', fontWeight: 'bold' }}
                   itemStyle={{ color: '#000' }}
-                  formatter={(value: number) => [`$${value.toFixed(2)}`, 'Revenue']}
+                  formatter={(value: number) => [`LKR ${value.toFixed(2)}`, 'Revenue']}
                 />
                 <Area 
                   type="monotone" 
@@ -270,7 +271,7 @@ export default function DashboardPage() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-sm text-gray-900">${order.total.toFixed(2)}</p>
+                      <p className="font-bold text-sm text-gray-900">LKR {order.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
                       <span className={`inline-block mt-1 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider ${
                         order.status === 'delivered' ? 'bg-green-100 text-green-700' : 
                         order.status === 'cancelled' ? 'bg-red-100 text-red-700' :

@@ -69,6 +69,7 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
       productId: product.id!,
       name: product.name,
       price: discountedPrice,
+      originalPrice: basePrice,
       quantity,
       image: activeImage || product.images?.[0]?.url,
       variant: { size: selectedSize, color: selectedColor }
