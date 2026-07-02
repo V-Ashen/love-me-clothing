@@ -13,19 +13,23 @@ export interface CartItem {
 
 interface CartState {
   items: CartItem[];
+  isOpen: boolean;
   addItem: (item: CartItem) => void;
   removeItem: (productId: string) => void;
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  openCart: () => void;
+  closeCart: () => void;
 }
 
 export const useCart = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      isOpen: false,
       addItem: (item) => set((state) => {
-        const existingItem = state.items.find(i => i.productId === item.productId && i.variant?.size === item.variant?.size);
+        const existingItem = state.items.find(i => i.productId === item.productId && i.variant?.size === item.variant?.size && i.variant?.color === item.variant?.color);
         if (existingItem) {
           return {
             items: state.items.map(i => i === existingItem ? { ...i, quantity: i.quantity + item.quantity } : i)
@@ -37,7 +41,12 @@ export const useCart = create<CartState>()(
       clearCart: () => set({ items: [] }),
       getTotalItems: () => get().items.reduce((total, item) => total + item.quantity, 0),
       getTotalPrice: () => get().items.reduce((total, item) => total + (item.price * item.quantity), 0),
+      openCart: () => set({ isOpen: true }),
+      closeCart: () => set({ isOpen: false }),
     }),
-    { name: 'love-me-cart' }
+    { 
+      name: 'love-me-cart',
+      partialize: (state) => ({ items: state.items }) 
+    }
   )
 );

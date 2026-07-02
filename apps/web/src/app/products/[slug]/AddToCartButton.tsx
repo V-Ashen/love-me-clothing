@@ -4,7 +4,7 @@ import { Product } from 'shared';
 import toast from 'react-hot-toast';
 
 export default function AddToCartButton({ product }: { product: Product }) {
-  const { addItem } = useCart();
+  const { addItem, openCart } = useCart();
 
   const handleAdd = () => {
     addItem({
@@ -14,7 +14,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
       quantity: 1,
       image: product.images?.[0]?.url
     });
-    toast.success('Added to cart!');
+    openCart();
   };
 
   return (

@@ -4,16 +4,34 @@ import { placeCodOrder } from '../actions/checkout';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { db } from 'shared';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function CheckoutPage() {
   const { items, clearCart, getTotalPrice } = useCart();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [shippingFee, setShippingFee] = useState(350);
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState(5000);
 
   useEffect(() => {
     setMounted(true);
+    fetchSettings();
   }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const docSnap = await getDoc(doc(db, 'settings', 'general'));
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setShippingFee(data.shippingFee || 350);
+        setFreeShippingThreshold(data.freeShippingThreshold || 5000);
+      }
+    } catch (e) {
+      console.error("Failed to load settings", e);
+    }
+  };
 
   if (!mounted) return null;
 
@@ -27,10 +45,15 @@ export default function CheckoutPage() {
     const formData = new FormData(e.currentTarget);
     const customerDetails = Object.fromEntries(formData) as any;
 
+    const subtotal = getTotalPrice();
+    const finalShippingFee = subtotal < freeShippingThreshold ? shippingFee : 0;
+    const finalTotal = subtotal + finalShippingFee;
+
     const orderData = {
       customerDetails,
       items,
-      totalAmount: getTotalPrice(),
+      totalAmount: finalTotal,
+      shippingFee: finalShippingFee,
     };
 
     const result = await placeCodOrder(orderData);
@@ -58,10 +81,18 @@ export default function CheckoutPage() {
           <input name="phone" type="tel" placeholder="Phone Number" required className="border p-3 rounded-lg w-full focus:ring-2 focus:ring-brand-accent outline-none" />
           <textarea name="address" placeholder="Full Delivery Address" required rows={3} className="border p-3 rounded-lg w-full focus:ring-2 focus:ring-brand-accent outline-none" />
           
-          <div className="mt-8 pt-6 border-t">
-            <div className="flex justify-between text-lg font-bold mb-6">
-              <span>Total to Pay (COD)</span>
+          <div className="mt-8 pt-6 border-t space-y-4">
+            <div className="flex justify-between text-gray-500 font-medium">
+              <span>Subtotal</span>
               <span>LKR {getTotalPrice().toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between text-gray-500 font-medium pb-4 border-b">
+              <span>Shipping {getTotalPrice() >= freeShippingThreshold ? '(Free above LKR ' + freeShippingThreshold + ')' : ''}</span>
+              <span>{getTotalPrice() >= freeShippingThreshold ? 'FREE' : `LKR ${shippingFee.toFixed(2)}`}</span>
+            </div>
+            <div className="flex justify-between text-xl font-extrabold text-brand-dark mb-6">
+              <span>Total to Pay (COD)</span>
+              <span>LKR {(getTotalPrice() + (getTotalPrice() < freeShippingThreshold ? shippingFee : 0)).toFixed(2)}</span>
             </div>
             <button type="submit" disabled={loading} className="w-full bg-brand-accent text-white py-4 rounded-full font-bold text-lg hover:bg-red-600 transition-colors disabled:opacity-50">
               {loading ? 'Processing Order...' : 'Place COD Order'}

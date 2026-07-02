@@ -149,7 +149,7 @@ export default function DashboardPage() {
         {/* Total Revenue */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#FEF9E8] text-[#C2A353] flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
             </div>
             <div>
@@ -208,8 +208,8 @@ export default function DashboardPage() {
               <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#C2A353" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#C2A353" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#1a1a1a" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#1a1a1a" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
@@ -235,7 +235,7 @@ export default function DashboardPage() {
                 <Area 
                   type="monotone" 
                   dataKey="revenue" 
-                  stroke="#C2A353" 
+                  stroke="#1a1a1a" 
                   strokeWidth={3}
                   fillOpacity={1} 
                   fill="url(#colorRevenue)" 
@@ -249,7 +249,7 @@ export default function DashboardPage() {
         <div className="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg font-bold text-gray-900">Recent Orders</h2>
-            <Link href="/orders" className="text-xs font-bold text-[#C2A353] hover:text-[#a18641] uppercase tracking-widest transition-colors">
+            <Link href="/orders" className="text-xs font-bold text-gray-400 hover:text-gray-900 uppercase tracking-widest transition-colors">
               View All
             </Link>
           </div>

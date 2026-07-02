@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
-  const { getTotalItems } = useCart();
+  const { getTotalItems, openCart } = useCart();
   const [mounted, setMounted] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -108,14 +108,14 @@ export default function Navbar() {
 
           {/* Right: Icons */}
           <div className="flex flex-1 items-center justify-end gap-4 lg:gap-6 text-gray-300">
-            <Link href="/cart" className="relative flex items-center transition-colors hover:text-[#E8C222]">
+            <button onClick={openCart} className="relative flex items-center transition-colors hover:text-[#E8C222]">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
               {mounted && getTotalItems() > 0 && (
                 <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#E8C222] text-[10px] text-black font-extrabold animate-in fade-in zoom-in duration-300 shadow-sm">
                   {getTotalItems()}
                 </span>
               )}
-            </Link>
+            </button>
 
             <Link href="/account" className="hidden lg:block hover:text-[#E8C222] transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>

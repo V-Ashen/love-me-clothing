@@ -221,7 +221,7 @@ export default function StaffPage() {
                 <button 
                   type="submit" 
                   disabled={isSubmitting || roles.filter(r => currentLevel === 0 || r.level > currentLevel).length === 0}
-                  className="flex-1 bg-[#C2A353] text-white font-bold text-sm uppercase tracking-widest py-3 rounded-xl hover:bg-[#b09348] transition-colors shadow-md disabled:opacity-50"
+                  className="flex-1 bg-brand-dark text-white font-bold text-sm uppercase tracking-widest py-3 rounded-xl hover:bg-black transition-colors shadow-md disabled:opacity-50"
                 >
                   {isSubmitting ? 'Saving...' : editingUid ? 'Update Member' : 'Add Member'}
                 </button>
@@ -279,7 +279,7 @@ export default function StaffPage() {
                           </td>
                           <td className="px-6 py-5 text-right whitespace-nowrap">
                             {currentLevel !== 0 && (isMasterAdmin || (user.level !== undefined && user.level <= currentLevel)) ? (
-                              <span className="text-[#C2A353] italic text-sm font-medium">Restricted</span>
+                              <span className="text-red-500 italic text-sm font-medium">Restricted</span>
                             ) : (
                               <div className="flex justify-end gap-2">
                                 <button 

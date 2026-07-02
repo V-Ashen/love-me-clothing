@@ -1,6 +1,6 @@
 export type Role = 'admin' | 'staff' | 'customer';
 
-export type Permission = 'VIEW_DASHBOARD' | 'MANAGE_ORDERS' | 'MANAGE_PRODUCTS' | 'MANAGE_STAFF' | 'MANAGE_ROLES' | 'VIEW_MESSAGES';
+export type Permission = 'VIEW_DASHBOARD' | 'MANAGE_ORDERS' | 'MANAGE_PRODUCTS' | 'MANAGE_STAFF' | 'MANAGE_ROLES' | 'VIEW_MESSAGES' | 'VIEW_SETTINGS';
 
 export interface CustomRole {
   id?: string;
@@ -16,6 +16,20 @@ export interface User {
   customRoleId?: string;
   firstName?: string;
   lastName?: string;
+}
+
+export interface StoreSettings {
+  // Tracking
+  facebookPixelId?: string;
+  tiktokPixelId?: string;
+  // Shipping
+  shippingFee: number;
+  freeShippingThreshold: number;
+  // Contact & Socials
+  contactEmail?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  tiktokUrl?: string;
 }
 
 export interface ProductVariant {
@@ -74,6 +88,7 @@ export interface Order {
   customerDetails: OrderCustomerDetails;
   items: OrderCartItem[];
   totalAmount: number;
+  shippingFee?: number;
   paymentMethod: 'COD';
   status: 'pending' | 'processing' | 'dispatched' | 'completed';
   createdAt?: any;

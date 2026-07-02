@@ -12,6 +12,7 @@ const AVAILABLE_PERMISSIONS: { id: Permission; label: string }[] = [
   { id: 'MANAGE_STAFF', label: 'Manage Staff' },
   { id: 'MANAGE_ROLES', label: 'Manage Roles' },
   { id: 'VIEW_MESSAGES', label: 'View Messages' },
+  { id: 'VIEW_SETTINGS', label: 'View Settings' },
 ];
 
 export default function RolesPage() {
@@ -243,7 +244,7 @@ export default function RolesPage() {
                         </td>
                         <td className="px-6 py-6 text-right whitespace-nowrap">
                           {role.level <= currentLevel && currentLevel !== 0 ? (
-                            <span className="text-[#C2A353] italic text-sm font-medium">Restricted</span>
+                            <span className="text-red-500 italic text-sm font-medium">Restricted</span>
                           ) : (
                             <div className="flex justify-end gap-2">
                               <button 

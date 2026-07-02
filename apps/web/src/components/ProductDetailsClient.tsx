@@ -14,7 +14,7 @@ const COLOR_MAP: Record<string, string> = {
 };
 
 export default function ProductDetailsClient({ product, relatedProducts }: { product: Product, relatedProducts?: Product[] }) {
-  const { addItem } = useCart();
+  const { addItem, openCart } = useCart();
   const router = useRouter();
   const hasColors = product.colors && product.colors.length > 0;
   const hasSizes = product.sizes && product.sizes.length > 0;
@@ -74,7 +74,7 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
       image: activeImage || product.images?.[0]?.url,
       variant: { size: selectedSize, color: selectedColor }
     });
-    toast.success('Added to cart!');
+    openCart();
   };
 
   return (

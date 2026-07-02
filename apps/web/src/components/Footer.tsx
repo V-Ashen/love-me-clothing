@@ -1,7 +1,35 @@
+'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { db } from 'shared';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function Footer() {
+  const [socials, setSocials] = useState({
+    tiktok: 'https://www.tiktok.com/@love.me.clothing?_t=ZS-97V2vqXXphM',
+    instagram: 'https://www.instagram.com/clothingloveme?igsh=NDAwcXcxNXptcWF4',
+    facebook: 'https://www.facebook.com/share/1BKLbhug8n/'
+  });
+
+  useEffect(() => {
+    const fetchSocials = async () => {
+      try {
+        const snap = await getDoc(doc(db, 'settings', 'general'));
+        if (snap.exists()) {
+          const data = snap.data();
+          setSocials({
+            tiktok: data.tiktokUrl || socials.tiktok,
+            instagram: data.instagramUrl || socials.instagram,
+            facebook: data.facebookUrl || socials.facebook
+          });
+        }
+      } catch (e) {
+        console.error('Failed to load social links', e);
+      }
+    };
+    fetchSocials();
+  }, []);
   return (
     <footer className="bg-black text-white pt-20 pb-10">
       <div className="container mx-auto px-6 lg:px-12">
@@ -37,13 +65,13 @@ export default function Footer() {
 
           {/* Social Icons */}
           <div className="flex gap-4">
-            <a href="https://www.tiktok.com/@love.me.clothing?_t=ZS-97V2vqXXphM" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-600 transition-colors">
+            <a href={socials.tiktok} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-600 transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
             </a>
-            <a href="https://www.instagram.com/clothingloveme?igsh=NDAwcXcxNXptcWF4" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-600 transition-colors">
+            <a href={socials.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-600 transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
             </a>
-            <a href="https://www.facebook.com/share/1BKLbhug8n/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-600 transition-colors">
+            <a href={socials.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-600 transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
             </a>
           </div>

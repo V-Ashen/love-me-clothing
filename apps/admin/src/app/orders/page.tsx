@@ -204,6 +204,9 @@ export default function OrdersPage() {
                         </td>
                         <td className="px-6 py-4 font-bold text-gray-900">
                           LKR {order.totalAmount?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          {order.shippingFee && order.shippingFee > 0 && (
+                            <div className="text-[10px] text-gray-500 mt-1">Includes LKR {order.shippingFee.toLocaleString()} shipping</div>
+                          )}
                           <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">{order.paymentMethod}</div>
                         </td>
                         <td className="px-6 py-4">
@@ -305,6 +308,12 @@ export default function OrdersPage() {
                                       </div>
                                     </div>
                                   ))}
+                                  {order.shippingFee && order.shippingFee > 0 && (
+                                    <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100 shadow-sm mt-2">
+                                      <div className="font-bold text-sm text-gray-900">Standard Shipping</div>
+                                      <div className="font-bold text-sm text-gray-900">LKR {order.shippingFee.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                               
