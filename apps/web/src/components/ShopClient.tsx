@@ -72,8 +72,8 @@ export default function ShopClient({ initialProducts }: { initialProducts: Produ
       if (sortBy === 'price-low') return getPrice(a) - getPrice(b);
       if (sortBy === 'price-high') return getPrice(b) - getPrice(a);
       // Newest is default (already sorted from server, but we re-apply just in case)
-      const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
-      const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+      const timeA = typeof a.createdAt === 'number' ? a.createdAt : (a.createdAt?.toMillis ? a.createdAt.toMillis() : 0);
+      const timeB = typeof b.createdAt === 'number' ? b.createdAt : (b.createdAt?.toMillis ? b.createdAt.toMillis() : 0);
       return timeB - timeA;
     });
   }, [initialProducts, searchQuery, selectedCategory, selectedSubCategory, selectedColors, selectedSizes, sortBy]);

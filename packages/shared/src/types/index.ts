@@ -1,9 +1,21 @@
 export type Role = 'admin' | 'staff' | 'customer';
 
+export type Permission = 'VIEW_DASHBOARD' | 'MANAGE_ORDERS' | 'MANAGE_PRODUCTS' | 'MANAGE_STAFF' | 'MANAGE_ROLES' | 'VIEW_MESSAGES';
+
+export interface CustomRole {
+  id?: string;
+  name: string;
+  level: number; // 0 = Master Admin, 1 = Admin, 2+ = Staff/Manager
+  permissions: Permission[];
+}
+
 export interface User {
   uid: string;
   email: string;
   role: Role;
+  customRoleId?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface ProductVariant {
@@ -37,11 +49,40 @@ export interface Product {
   tags?: string[];
 }
 
+export interface OrderCartItem {
+  id: string;
+  name: string;
+  price: number;
+  image?: string;
+  size?: string;
+  color?: string;
+  quantity: number;
+}
+
+export interface OrderCustomerDetails {
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  phone: string;
+  address: string;
+}
+
 export interface Order {
   id?: string;
-  customerDetails: any;
-  items: any[];
+  customerDetails: OrderCustomerDetails;
+  items: OrderCartItem[];
   totalAmount: number;
   paymentMethod: 'COD';
   status: 'pending' | 'processing' | 'dispatched' | 'completed';
+  createdAt?: any;
+}
+
+export interface ContactMessage {
+  id?: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  message: string;
+  createdAt?: any;
+  status: 'unread' | 'read';
 }

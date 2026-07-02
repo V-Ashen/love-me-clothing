@@ -8,7 +8,7 @@ import { useAdminStore } from '../lib/store';
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const isTaskActive = useAdminStore((state) => state.isTaskActive);
+  const { isTaskActive, isAdmin, permissions, roleName } = useAdminStore((state) => state);
 
   if (pathname === '/login') return null;
 
@@ -20,14 +20,23 @@ export default function Sidebar() {
 
   return (
     <aside className="w-64 bg-brand-dark text-white min-h-screen p-6 flex flex-col">
-      <h2 className="text-xl font-bold mb-8 tracking-wider">LMC ADMIN</h2>
+      <div className="mb-8">
+        <h2 className="text-xl font-bold tracking-wider mb-1">LMC ADMIN</h2>
+        {roleName && (
+          <div className="inline-block bg-white/10 text-white/80 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded">
+            {roleName}
+          </div>
+        )}
+      </div>
       <nav className="flex-1 space-y-2">
-        <Link 
-          href="/" 
-          className={`block px-4 py-2 rounded-lg transition-colors ${pathname === '/' ? 'bg-white/10' : 'hover:bg-white/5'}`}
-        >
-          Dashboard
-        </Link>
+        {(isAdmin || permissions.includes('VIEW_DASHBOARD')) && (
+          <Link 
+            href="/" 
+            className={`block px-4 py-2 rounded-lg transition-colors ${pathname === '/' ? 'bg-white/10' : 'hover:bg-white/5'}`}
+          >
+            Dashboard
+          </Link>
+        )}
         <Link 
           href="/products" 
           className={`block px-4 py-2 rounded-lg transition-colors ${pathname.includes('/products') ? 'bg-white/10' : 'hover:bg-white/5'}`}
@@ -40,6 +49,30 @@ export default function Sidebar() {
         >
           Orders
         </Link>
+        {(isAdmin || permissions.includes('VIEW_MESSAGES')) && (
+          <Link 
+            href="/messages" 
+            className={`block px-4 py-2 rounded-lg transition-colors ${pathname.includes('/messages') ? 'bg-white/10' : 'hover:bg-white/5'}`}
+          >
+            Messages
+          </Link>
+        )}
+        {(isAdmin || permissions.includes('MANAGE_ROLES')) && (
+          <Link 
+            href="/roles" 
+            className={`block px-4 py-2 rounded-lg transition-colors ${pathname.includes('/roles') ? 'bg-white/10' : 'hover:bg-white/5'}`}
+          >
+            System Roles
+          </Link>
+        )}
+        {(isAdmin || permissions.includes('MANAGE_STAFF')) && (
+          <Link 
+            href="/staff" 
+            className={`block px-4 py-2 rounded-lg transition-colors ${pathname.includes('/staff') ? 'bg-white/10' : 'hover:bg-white/5'}`}
+          >
+            Manage Staff
+          </Link>
+        )}
       </nav>
       <button 
         onClick={handleLogout}

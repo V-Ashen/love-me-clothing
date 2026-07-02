@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from 'shared';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -29,20 +29,6 @@ export default function LoginPage() {
     setLoading(false);
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password) return toast.error('Please enter email and password');
-    setLoading(true);
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      setCookieAndRedirect();
-      toast.success('Admin account created successfully!');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to create account');
-    }
-    setLoading(false);
-  };
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-sm border">
@@ -65,21 +51,13 @@ export default function LoginPage() {
             required 
             minLength={6}
           />
-          <div className="flex gap-4 pt-2">
+          <div className="pt-2">
             <button 
               type="submit" 
               disabled={loading}
               className="w-full bg-brand-dark text-white p-3 rounded-lg font-semibold hover:bg-black transition-colors"
             >
               {loading ? 'Authenticating...' : 'Sign In'}
-            </button>
-            <button 
-              type="button" 
-              onClick={handleSignup}
-              disabled={loading}
-              className="w-full bg-gray-100 text-gray-800 p-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
-            >
-              Register
             </button>
           </div>
         </form>

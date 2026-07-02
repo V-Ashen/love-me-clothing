@@ -8,7 +8,15 @@ export const revalidate = 60;
 
 export default async function HomePage() {
   const querySnapshot = await getDocs(collection(db, 'products'));
-  const products = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
+  const products = querySnapshot.docs.map(doc => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      ...data,
+      createdAt: data.createdAt?.toMillis ? data.createdAt.toMillis() : null,
+      updatedAt: data.updatedAt?.toMillis ? data.updatedAt.toMillis() : null
+    };
+  }) as Product[];
 
   return (
     <main className="min-h-screen bg-white">
@@ -98,7 +106,7 @@ export default async function HomePage() {
           ].map((cat, i) => (
             <Link href={cat.link} key={i} className="group flex flex-col items-center">
               <div className="relative w-full aspect-[4/3] overflow-hidden mb-6 bg-gray-100">
-                <Image src={cat.img} alt={cat.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                <Image src={cat.img} alt={cat.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
               <span className="text-gray-900 text-lg font-semibold tracking-wide">{cat.title}</span>
             </Link>
@@ -133,6 +141,7 @@ export default async function HomePage() {
                         src={product.images[0].url} 
                         alt={product.name} 
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                         className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105" 
                       />
                     ) : (
@@ -192,6 +201,7 @@ export default async function HomePage() {
                   src="/promo-1.png" 
                   alt="Wide leg pants collection" 
                   fill 
+                  sizes="(max-width: 1024px) 100vw, 66vw"
                   className="object-cover" 
                 />
               </div>
@@ -200,6 +210,7 @@ export default async function HomePage() {
                   src="/promo-2.png" 
                   alt="Light color pants" 
                   fill 
+                  sizes="(max-width: 1024px) 50vw, 33vw"
                   className="object-cover" 
                 />
               </div>
@@ -208,6 +219,7 @@ export default async function HomePage() {
                   src="/promo-3.png" 
                   alt="Colorful fabrics" 
                   fill 
+                  sizes="(max-width: 1024px) 50vw, 33vw"
                   className="object-cover" 
                 />
               </div>
@@ -242,6 +254,7 @@ export default async function HomePage() {
                 src="/denims.png" 
                 alt="Stack of denims" 
                 fill 
+                sizes="(max-width: 768px) 100vw, 400px"
                 className="object-contain p-6" 
               />
             </div>

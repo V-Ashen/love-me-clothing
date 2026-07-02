@@ -23,15 +23,20 @@ export default async function ShopPage() {
     );
     
     const querySnapshot = await getDocs(q);
-    products = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as Product[];
+    products = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data.createdAt?.toMillis ? data.createdAt.toMillis() : null,
+        updatedAt: data.updatedAt?.toMillis ? data.updatedAt.toMillis() : null
+      };
+    }) as Product[];
     
     // Sort by createdAt descending initially so newest is first by default
     products.sort((a, b) => {
-      const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
-      const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+      const timeA = typeof a.createdAt === 'number' ? a.createdAt : 0;
+      const timeB = typeof b.createdAt === 'number' ? b.createdAt : 0;
       return timeB - timeA;
     });
 

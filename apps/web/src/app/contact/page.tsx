@@ -1,3 +1,5 @@
+import ContactForm from '../../components/ContactForm';
+
 export const metadata = {
   title: 'Contact Us | Love Me Clothing',
   description: 'Get in touch with Love Me Clothing Industries (Pvt) Ltd. We would love to hear from you.',
@@ -79,29 +81,7 @@ export default function ContactPage() {
           {/* Contact Form */}
           <div className="bg-white rounded-[32px] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
             <h3 className="text-2xl font-bold text-gray-900 mb-8">Send a Message</h3>
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">First Name</label>
-                  <input type="text" className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300" placeholder="Jane" required />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Last Name</label>
-                  <input type="text" className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300" placeholder="Doe" required />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Email Address</label>
-                <input type="email" className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300" placeholder="jane@example.com" required />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Message</label>
-                <textarea rows={4} className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300 resize-none" placeholder="How can we help you?" required></textarea>
-              </div>
-              <button type="button" className="w-full bg-black text-white font-bold uppercase tracking-widest text-sm py-4 rounded-full hover:bg-brand-accent transition-colors mt-4">
-                Send Message
-              </button>
-            </form>
+            <ContactForm />
           </div>
 
         </div>
