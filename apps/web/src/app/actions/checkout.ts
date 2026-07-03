@@ -3,14 +3,15 @@ import { db } from 'shared';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import sgMail from '@sendgrid/mail';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
-export async function placeCodOrder(orderData: any) {
+export async function placeOrder(orderData: any) {
   try {
     const docRef = await addDoc(collection(db, 'orders'), {
       ...orderData,
       status: 'pending',
-      paymentMethod: 'COD',
       createdAt: serverTimestamp(),
     });
 
@@ -21,7 +22,8 @@ export async function placeCodOrder(orderData: any) {
           to: orderData.customerDetails.email,
           from: process.env.SENDGRID_VERIFIED_SENDER || 'hello@lovemeclothing.com', // Must be a verified sender in SendGrid
           subject: `Order Confirmation - #${docRef.id}`,
-          html: `<h2>Thanks for your COD order!</h2>
+          html: `<h2>Thanks for your order!</h2>
+                 <p>Your payment method is: ${orderData.paymentMethod}</p>
                  <p>We will dispatch it shortly.</p>`,
         });
       } catch (emailError) {

@@ -230,7 +230,7 @@ export default function DashboardPage() {
                 <Tooltip 
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', fontWeight: 'bold' }}
                   itemStyle={{ color: '#000' }}
-                  formatter={(value: number) => [`LKR ${value.toFixed(2)}`, 'Revenue']}
+                  formatter={(value: any) => [`LKR ${Number(value).toFixed(2)}`, 'Revenue']}
                 />
                 <Area 
                   type="monotone" 

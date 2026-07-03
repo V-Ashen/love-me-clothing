@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Product } from 'shared';
 import Link from 'next/link';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
@@ -15,6 +15,10 @@ export default function ProductTable({ initialProducts }: ProductTableProps) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<'ALL' | 'Top' | 'Bottom' | 'Outerwear'>('ALL');
   const [subFilter, setSubFilter] = useState('ALL');
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const handleDelete = async (id: string | undefined) => {
     if (!id) return;
@@ -63,6 +67,18 @@ export default function ProductTable({ initialProducts }: ProductTableProps) {
     const matchesSubFilter = subFilter === 'ALL' || p.subCategory === subFilter;
     return matchesSearch && matchesFilter && matchesSubFilter;
   });
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, filter, subFilter]);
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -137,12 +153,12 @@ export default function ProductTable({ initialProducts }: ProductTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
-            {filteredProducts.length === 0 ? (
+            {paginatedProducts.length === 0 ? (
               <tr>
                 <td colSpan={7} className="p-8 text-center text-gray-500 font-medium">No products match your criteria.</td>
               </tr>
             ) : (
-              filteredProducts.map((product) => (
+              paginatedProducts.map((product) => (
                 <tr key={product.id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="p-6 w-24">
                     {product.images && product.images[0] ? (
@@ -201,6 +217,31 @@ export default function ProductTable({ initialProducts }: ProductTableProps) {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between px-6 py-4 bg-white border-t border-gray-100">
+          <span className="text-sm text-gray-500 font-medium">
+            Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredProducts.length)} of {filteredProducts.length} products
+          </span>
+          <div className="flex gap-2">
+            <button 
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:hover:bg-white transition-colors"
+            >
+              Previous
+            </button>
+            <button 
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:hover:bg-white transition-colors"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

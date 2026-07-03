@@ -3,6 +3,7 @@ import { db, Product } from 'shared';
 import Link from 'next/link';
 import Image from 'next/image';
 import NewArrivals from '../components/NewArrivals';
+import ProductCard from "../components/ProductCard";
 
 export const revalidate = 60; 
 
@@ -129,37 +130,7 @@ export default async function HomePage() {
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {(products.some(p => p.featured) ? products.filter(p => p.featured) : products).slice(0, 4).map((product, idx) => (
-                <Link href={`/products/${product.id}`} key={product.id} className="group flex flex-col">
-                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100 mb-4 block">
-                    {idx === 3 && (
-                      <span className="absolute top-3 right-3 z-10 bg-yellow-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
-                        Best Seller
-                      </span>
-                    )}
-                    {product.images && product.images[0] ? (
-                      <Image 
-                        src={product.images[0].url} 
-                        alt={product.name} 
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                        className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105" 
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-gray-400 bg-gray-100">No Image</div>
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-1 truncate group-hover:text-black transition-colors">
-                      {product.name}
-                    </h3>
-                  </div>
-                  <p className="text-lg text-black font-bold mb-4">LKR {product.price.toFixed(2)}</p>
-                  
-                  <div className="flex items-center justify-center gap-2 w-full border border-gray-200 rounded-full py-3 text-sm font-semibold text-gray-900 group-hover:bg-black group-hover:text-white group-hover:border-black transition-all duration-300">
-                    Add to Cart 
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500 transition-colors"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-                  </div>
-                </Link>
+                <ProductCard key={product.id} product={product} isBestSeller={idx === 3} />
               ))}
             </div>
           )}

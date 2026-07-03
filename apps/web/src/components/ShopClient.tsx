@@ -4,15 +4,16 @@ import { Product } from 'shared';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
+import ProductCard from './ProductCard';
 
 const PREDEFINED_COLORS = [
-  'Black', 'White', 'Gray', 'Navy', 'Blue', 'Red', 'Green', 'Olive', 'Purple', 'Pink', 'Yellow', 'Brown', 'Orange', 'Beige'
+  'Black', 'White', 'Gray', 'Navy', 'Blue', 'Red', 'Green', 'Olive', 'Purple', 'Pink', 'Yellow', 'Brown', 'Orange', 'Beige', 'Other'
 ];
 const COLOR_MAP: Record<string, string> = {
   'Black': '#000000', 'White': '#FFFFFF', 'Gray': '#6b7280', 'Navy': '#1e3a8a', 
   'Blue': '#3b82f6', 'Red': '#ef4444', 'Green': '#10b981', 'Olive': '#4d7c0f', 
   'Purple': '#a855f7', 'Pink': '#ec4899', 'Yellow': '#eab308', 'Brown': '#78350f', 
-  'Orange': '#f97316', 'Beige': '#fef3c7'
+  'Orange': '#f97316', 'Beige': '#fef3c7', 'Other': 'conic-gradient(#ef4444, #eab308, #10b981, #3b82f6, #a855f7, #ef4444)'
 };
 
 const ALL_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '25-26', '28-29', '30', '31', '32', '33', '34', '36', '38', '40', '42', '44', '46', '48', '50'];
@@ -170,7 +171,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: Produ
                   key={color}
                   onClick={() => toggleColor(color)}
                   className={`w-8 h-8 rounded-full border-2 transition-transform ${selectedColors.includes(color) ? 'border-brand-dark scale-110 shadow-sm' : 'border-gray-200 hover:scale-105'}`}
-                  style={{ backgroundColor: COLOR_MAP[color] || '#CCC' }}
+                  style={{ background: COLOR_MAP[color] || '#CCC' }}
                   title={color}
                 />
               ))}
@@ -233,41 +234,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: Produ
                   : product.price;
 
                 return (
-                  <Link href={`/products/${product.id}`} key={product.id} className="group flex flex-col">
-                    <div className="relative aspect-[4/5] bg-gray-50 rounded-[24px] overflow-hidden mb-5">
-                      <Image 
-                        src={product.images?.[0]?.url || ''} 
-                        alt={product.name} 
-                        fill 
-                        className="object-cover transition-transform duration-700 group-hover:scale-110" 
-                      />
-                      {/* Icons hover */}
-                      <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                        <button className="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-900 hover:bg-brand-accent hover:text-white transition-colors">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                        </button>
-                      </div>
-                      {/* Discount Badge */}
-                      {isDiscounted && (
-                        <div className="absolute top-4 left-4 bg-red-500 text-white text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-md">
-                          -{product.discountPercentage}%
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="px-2">
-                      <h3 className="text-sm font-bold text-brand-dark uppercase tracking-wide mb-1 truncate">{product.name}</h3>
-                      <div className="flex items-center gap-3 mb-3">
-                        <p className="text-sm font-bold text-gray-600">LKR {discountedPrice.toFixed(2)}</p>
-                        {isDiscounted && (
-                          <p className="text-xs font-bold text-red-500 line-through">LKR {product.price.toFixed(2)}</p>
-                        )}
-                      </div>
-                      <button className="w-full bg-white border border-gray-200 text-brand-dark text-xs font-extrabold uppercase tracking-widest py-3 rounded-full hover:bg-brand-dark hover:text-white transition-colors shadow-sm">
-                        View Product
-                      </button>
-                    </div>
-                  </Link>
+                  <ProductCard key={product.id} product={product} />
                 );
               })}
             </div>

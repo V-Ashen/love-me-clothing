@@ -8,7 +8,7 @@ import { useAdminStore } from '../../../../lib/store';
 import Link from 'next/link';
 
 const PREDEFINED_COLORS = [
-  'Black', 'White', 'Gray', 'Navy', 'Blue', 'Red', 'Green', 'Olive', 'Purple', 'Pink', 'Yellow', 'Brown', 'Orange', 'Beige'
+  'Black', 'White', 'Gray', 'Navy', 'Blue', 'Red', 'Green', 'Olive', 'Purple', 'Pink', 'Yellow', 'Brown', 'Orange', 'Beige', 'Other'
 ];
 
 const TOP_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
@@ -33,10 +33,9 @@ export default function EditProduct() {
   const [colorFiles, setColorFiles] = useState<Record<string, File>>({});
   const [existingColorImages, setExistingColorImages] = useState<any[]>([]);
   
-  // Legacy / Default Image
-  const [file, setFile] = useState<File | null>(null);
-  const [existingImageUrl, setExistingImageUrl] = useState('');
-  const [existingPublicId, setExistingPublicId] = useState('');
+  // Main Product Gallery Images
+  const [files, setFiles] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<{url: string, publicId: string}[]>([]);
   
   const [loading, setLoading] = useState(false);
   const [initialFetch, setInitialFetch] = useState(true);
@@ -67,8 +66,7 @@ export default function EditProduct() {
           setTags(data.tags ? data.tags.join(', ') : '');
           
           if (data.images && data.images.length > 0) {
-            setExistingImageUrl(data.images[0].url);
-            setExistingPublicId(data.images[0].publicId || data.images[0].public_id);
+            setExistingImages(data.images.map((img: any) => ({ url: img.url, publicId: img.publicId || img.public_id })));
           }
           
           if (data.colors) setSelectedColors(data.colors);
@@ -187,9 +185,9 @@ export default function EditProduct() {
     setLoading(true);
     setTaskActive(true);
     try {
-      let defaultImageData = { url: existingImageUrl, publicId: existingPublicId };
-      if (file) {
-        defaultImageData = await uploadImage(file);
+      let uploadedImages = [...existingImages];
+      for (const f of files) {
+        uploadedImages.push(await uploadImage(f));
       }
 
       // Process Color Images (Merge new uploads with existing ones)
@@ -234,7 +232,7 @@ export default function EditProduct() {
         colorImages,
         stock: totalStock,
         status,
-        images: [defaultImageData],
+        images: uploadedImages,
         updatedAt: serverTimestamp(),
       });
 
@@ -325,7 +323,7 @@ export default function EditProduct() {
                 className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-brand-dark outline-none"
               />
               <datalist id="subcategories">
-                {subCategoryOptions[category].map((opt) => (
+                {(subCategoryOptions[category] || []).map((opt) => (
                   <option key={opt} value={opt} />
                 ))}
               </datalist>
@@ -366,16 +364,57 @@ export default function EditProduct() {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Update Default Image (Optional)</label>
-            {existingImageUrl && !file && (
-              <img src={existingImageUrl} alt="Current" className="w-24 h-24 object-cover rounded-lg border mb-4" />
+            <label className="block text-sm font-medium text-gray-700 mb-2">Product Gallery Images *</label>
+            
+            {/* Existing Images */}
+            {existingImages.length > 0 && (
+              <div className="flex gap-4 mb-4 overflow-x-auto p-2">
+                {existingImages.map((img, i) => (
+                  <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0 shadow-sm">
+                    <img src={img.url} alt="Existing" className="object-cover w-full h-full" />
+                    <button 
+                      type="button" 
+                      onClick={() => setExistingImages(existingImages.filter((_, idx) => idx !== i))} 
+                      className="absolute top-1 right-1 bg-white text-red-500 rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-red-50"
+                      title="Remove image"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
             )}
+
+            {/* New Uploads */}
             <input 
               type="file" 
               accept="image/*"
-              onChange={(e) => { if (e.target.files?.[0]) setFile(e.target.files[0]) }} 
+              multiple
+              onChange={(e) => { 
+                if (e.target.files) {
+                  setFiles(prev => [...prev, ...Array.from(e.target.files!)]);
+                }
+              }} 
+              required={existingImages.length === 0 && files.length === 0} 
               className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-brand-dark outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
             />
+            {files.length > 0 && (
+              <div className="flex gap-4 mt-4 overflow-x-auto p-2">
+                {files.map((f, i) => (
+                  <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0 shadow-sm opacity-80">
+                    <img src={URL.createObjectURL(f)} className="object-cover w-full h-full" alt="preview" />
+                    <button 
+                      type="button" 
+                      onClick={() => setFiles(files.filter((_, idx) => idx !== i))} 
+                      className="absolute top-1 right-1 bg-white text-red-500 rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-red-50"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <p className="text-xs text-gray-500 mt-2">Upload multiple images. The first image will be the primary cover image. The second will be shown on hover.</p>
           </div>
         </div>
 
@@ -387,16 +426,33 @@ export default function EditProduct() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">Available Colors</label>
             <div className="flex flex-wrap gap-3">
-              {PREDEFINED_COLORS.map(color => (
-                <button
-                  key={color}
-                  type="button"
-                  onClick={() => handleColorToggle(color)}
-                  className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors ${selectedColors.includes(color) ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
-                >
-                  {color}
-                </button>
-              ))}
+              {PREDEFINED_COLORS.map(color => {
+                const isSelected = selectedColors.includes(color);
+                const isOther = color === 'Other';
+                
+                let btnClass = `px-4 py-2 rounded-full border text-sm font-medium transition-colors `;
+                
+                if (isOther) {
+                  btnClass += isSelected 
+                    ? 'bg-amber-500 text-white border-amber-500 shadow-md' 
+                    : 'bg-amber-50 text-amber-700 border-amber-300 hover:bg-amber-100';
+                } else {
+                  btnClass += isSelected 
+                    ? 'bg-brand-dark text-white border-brand-dark' 
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200';
+                }
+
+                return (
+                  <button
+                    key={color}
+                    type="button"
+                    onClick={() => handleColorToggle(color)}
+                    className={btnClass}
+                  >
+                    {color}
+                  </button>
+                )
+              })}
             </div>
           </div>
 
@@ -419,8 +475,9 @@ export default function EditProduct() {
                         type="file" 
                         accept="image/*"
                         onChange={(e) => {
-                          if (e.target.files?.[0]) {
-                            setColorFiles(prev => ({ ...prev, [color]: e.target.files![0] }));
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setColorFiles(prev => ({ ...prev, [color]: file }));
                           }
                         }} 
                         className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"

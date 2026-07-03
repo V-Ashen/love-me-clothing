@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { useAdminStore } from '../../../lib/store';
 
 const PREDEFINED_COLORS = [
-  'Black', 'White', 'Gray', 'Navy', 'Blue', 'Red', 'Green', 'Olive', 'Purple', 'Pink', 'Yellow', 'Brown', 'Orange', 'Beige'
+  'Black', 'White', 'Gray', 'Navy', 'Blue', 'Red', 'Green', 'Olive', 'Purple', 'Pink', 'Yellow', 'Brown', 'Orange', 'Beige', 'Other'
 ];
 
 const TOP_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
@@ -30,8 +30,8 @@ export default function AddProduct() {
   const [variantPrice, setVariantPrice] = useState<Record<string, number>>({});
   const [colorFiles, setColorFiles] = useState<Record<string, File>>({});
   
-  // Legacy / Default Image
-  const [file, setFile] = useState<File | null>(null);
+  // Main Product Gallery Images
+  const [files, setFiles] = useState<File[]>([]);
   
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -118,16 +118,19 @@ export default function AddProduct() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !price || !file) {
-      toast.error('Please fill all required fields and upload a default image');
+    if (!name || !price || files.length === 0) {
+      toast.error('Please fill all required fields and upload at least one default image');
       return;
     }
 
     setLoading(true);
     setTaskActive(true);
     try {
-      // 1. Upload default image
-      const defaultImageData = await uploadImage(file);
+      // 1. Upload default gallery images
+      const uploadedImages = [];
+      for (const f of files) {
+        uploadedImages.push(await uploadImage(f));
+      }
       
       // 2. Upload color images
       const colorImages = [];
@@ -165,7 +168,7 @@ export default function AddProduct() {
         colorImages,
         stock: totalStock, // Aggregate total stock
         status,
-        images: [defaultImageData],
+        images: uploadedImages,
         createdAt: serverTimestamp(),
       });
 
@@ -259,7 +262,7 @@ export default function AddProduct() {
                 className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-brand-dark outline-none"
               />
               <datalist id="subcategories">
-                {subCategoryOptions[category].map((opt) => (
+                {(subCategoryOptions[category] || []).map((opt) => (
                   <option key={opt} value={opt} />
                 ))}
               </datalist>
@@ -300,15 +303,36 @@ export default function AddProduct() {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Default Product Image *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Product Gallery Images *</label>
             <input 
               type="file" 
               accept="image/*"
-              onChange={(e) => { if (e.target.files?.[0]) setFile(e.target.files[0]) }} 
-              required 
+              multiple
+              onChange={(e) => { 
+                if (e.target.files) {
+                  setFiles(Array.from(e.target.files));
+                }
+              }} 
+              required={files.length === 0} 
               className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-brand-dark outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
             />
-            <p className="text-xs text-gray-500 mt-2">This image will be used in catalogs and as a fallback.</p>
+            {files.length > 0 && (
+              <div className="flex gap-4 mt-4 overflow-x-auto p-2">
+                {files.map((f, i) => (
+                  <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0 shadow-sm">
+                    <img src={URL.createObjectURL(f)} className="object-cover w-full h-full" alt="preview" />
+                    <button 
+                      type="button" 
+                      onClick={() => setFiles(files.filter((_, idx) => idx !== i))} 
+                      className="absolute top-1 right-1 bg-white text-red-500 rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-red-50"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <p className="text-xs text-gray-500 mt-2">Upload multiple images. The first image will be the primary cover image. The second will be shown on hover.</p>
           </div>
         </div>
 
@@ -320,16 +344,33 @@ export default function AddProduct() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">Available Colors</label>
             <div className="flex flex-wrap gap-3">
-              {PREDEFINED_COLORS.map(color => (
-                <button
-                  key={color}
-                  type="button"
-                  onClick={() => handleColorToggle(color)}
-                  className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors ${selectedColors.includes(color) ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
-                >
-                  {color}
-                </button>
-              ))}
+              {PREDEFINED_COLORS.map(color => {
+                const isSelected = selectedColors.includes(color);
+                const isOther = color === 'Other';
+                
+                let btnClass = `px-4 py-2 rounded-full border text-sm font-medium transition-colors `;
+                
+                if (isOther) {
+                  btnClass += isSelected 
+                    ? 'bg-amber-500 text-white border-amber-500 shadow-md' 
+                    : 'bg-amber-50 text-amber-700 border-amber-300 hover:bg-amber-100';
+                } else {
+                  btnClass += isSelected 
+                    ? 'bg-brand-dark text-white border-brand-dark' 
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200';
+                }
+
+                return (
+                  <button
+                    key={color}
+                    type="button"
+                    onClick={() => handleColorToggle(color)}
+                    className={btnClass}
+                  >
+                    {color}
+                  </button>
+                )
+              })}
             </div>
           </div>
 
@@ -345,8 +386,9 @@ export default function AddProduct() {
                       type="file" 
                       accept="image/*"
                       onChange={(e) => {
-                        if (e.target.files?.[0]) {
-                          setColorFiles(prev => ({ ...prev, [color]: e.target.files![0] }));
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setColorFiles(prev => ({ ...prev, [color]: file }));
                         }
                       }} 
                       className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
