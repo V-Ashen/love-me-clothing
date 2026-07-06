@@ -22,7 +22,7 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
   const hasColors = product.colors && product.colors.length > 0;
   const hasSizes = product.sizes && product.sizes.length > 0;
   
-  const [selectedColor, setSelectedColor] = useState<string>(hasColors ? product.colors![0] : '');
+  const [selectedColor, setSelectedColor] = useState<string>(hasColors ? product.colors?.[0] || '' : '');
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantity, setQuantity] = useState<number>(1);
   const [activeImage, setActiveImage] = useState<string>(product.images?.[0]?.url || '');
@@ -32,7 +32,8 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
     if (selectedColor && product.colorImages) {
       const colorImg = product.colorImages.find(c => c.color === selectedColor);
       if (colorImg && colorImg.images.length > 0) {
-        setActiveImage(colorImg.images[0].url);
+        const firstImgUrl = colorImg.images?.[0]?.url;
+        if (firstImgUrl) setActiveImage(firstImgUrl);
       }
     }
   }, [selectedColor, product.colorImages]);
@@ -259,7 +260,7 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
            {relatedProducts?.slice(0, 4).map(rp => (
              <a href={`/products/${rp.id}`} key={rp.id} className="group block bg-[#F8F9FA] rounded-2xl p-4 transition-all hover:shadow-lg">
                 <div className="relative aspect-square mb-4">
-                  <Image src={rp.images[0]?.url} alt={rp.name} fill className="object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300" />
+                  <Image src={rp.images?.[0]?.url || ''} alt={rp.name} fill className="object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300" />
                 </div>
                 <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-1">{rp.name}</h3>
                 <p className="text-xs font-semibold text-gray-500">LKR {rp.price.toFixed(2)}</p>

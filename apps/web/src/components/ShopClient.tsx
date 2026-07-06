@@ -16,7 +16,7 @@ const COLOR_MAP: Record<string, string> = {
   'Orange': '#f97316', 'Beige': '#fef3c7', 'Other': 'conic-gradient(#ef4444, #eab308, #10b981, #3b82f6, #a855f7, #ef4444)'
 };
 
-const ALL_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '25-26', '28-29', '30', '31', '32', '33', '34', '36', '38', '40', '42', '44', '46', '48', '50'];
+const ALL_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '26', '28', '30', '32', '34', '36', '38', '40', '42', '44', '46', '48', '50'];
 const ITEMS_PER_PAGE = 12;
 
 export default function ShopClient({ initialProducts }: { initialProducts: Product[] }) {
