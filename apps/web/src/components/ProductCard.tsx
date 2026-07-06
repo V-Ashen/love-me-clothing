@@ -18,8 +18,8 @@ export default function ProductCard({ product, isBestSeller = false }: ProductCa
   const hasMultipleImages = product.images && product.images.length > 1;
 
   // The first image is the default. The second is the hover image.
-  const defaultImage = hasImage ? product.images![0].url : '';
-  const hoverImage = hasMultipleImages ? product.images![1].url : defaultImage;
+  const defaultImage = hasImage ? product.images?.[0]?.url || '' : '';
+  const hoverImage = hasMultipleImages ? product.images?.[1]?.url || defaultImage : defaultImage;
 
   // Pricing & Discounts
   const isDiscounted = !!product.discountPercentage && product.discountPercentage > 0;
