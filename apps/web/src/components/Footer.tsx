@@ -60,7 +60,7 @@ export default function Footer() {
         {/* Middle Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-10 mb-10">
           <p className="text-gray-400 text-sm font-medium">
-            "Bringing you the finest handloom products since 1985."
+            "Bringing you the finest products with LOVE."
           </p>
 
           {/* Social Icons */}

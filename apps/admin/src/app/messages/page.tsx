@@ -83,7 +83,7 @@ export default function MessagesPage() {
                     <div className="text-sm text-gray-500">{msg.email}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900 max-w-xs truncate" title={msg.message}>
+                    <div className="text-sm text-gray-900 max-w-sm max-h-32 overflow-y-auto whitespace-pre-wrap pr-2">
                       {msg.message}
                     </div>
                   </td>

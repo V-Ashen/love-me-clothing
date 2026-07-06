@@ -12,6 +12,15 @@ const nextConfig = {
       }
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/admin',
+        destination: 'https://love-me-clothing-admin-sepia.vercel.app/',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

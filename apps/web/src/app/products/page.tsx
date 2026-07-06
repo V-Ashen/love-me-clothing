@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, doc, getDoc } from 'firebase/firestore';
 import { db, Product } from 'shared';
 import ShopClient from '../../components/ShopClient';
 import { Metadata } from 'next';
@@ -13,8 +13,17 @@ export const metadata: Metadata = {
 
 export default async function ShopPage() {
   let products: Product[] = [];
+  let globalCategories: Record<string, string[]> = {
+    Top: ['over sized shirts', 'over sized t shirts'],
+    Bottom: ['denim', 'cargo pants', 'jeans', 'leg pants', 'skirts'],
+    Outerwear: ['hoodies', 'sweaters']
+  };
 
   try {
+    const catDoc = await getDoc(doc(db, 'settings', 'categories'));
+    if (catDoc.exists()) {
+      globalCategories = catDoc.data() as Record<string, string[]>;
+    }
     // Fetch all active products
     // We will do filtering and pagination on the client side for a snappy experience
     const q = query(collection(db, 'products'));
@@ -44,7 +53,7 @@ export default async function ShopPage() {
   return (
     <main className="min-h-screen bg-brand-light pt-32 pb-24">
       <Suspense fallback={<div className="flex justify-center items-center h-64">Loading shop...</div>}>
-        <ShopClient initialProducts={JSON.parse(JSON.stringify(products))} />
+        <ShopClient initialProducts={JSON.parse(JSON.stringify(products))} globalCategories={globalCategories} />
       </Suspense>
     </main>
   );

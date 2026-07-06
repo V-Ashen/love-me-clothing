@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { db } from 'shared';
-import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useRouter, useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useAdminStore } from '../../../../lib/store';
@@ -42,11 +42,26 @@ export default function EditProduct() {
   const router = useRouter();
   const setTaskActive = useAdminStore((state) => state.setTaskActive);
 
-  const subCategoryOptions: Record<string, string[]> = {
+  const [subCategoryOptions, setSubCategoryOptions] = useState<Record<string, string[]>>({
     Top: ['over sized shirts', 'over sized t shirts'],
     Bottom: ['denim', 'cargo pants', 'jeans', 'leg pants', 'skirts'],
     Outerwear: ['hoodies', 'sweaters']
-  };
+  });
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const catRef = doc(db, 'settings', 'categories');
+        const catSnap = await getDoc(catRef);
+        if (catSnap.exists()) {
+          setSubCategoryOptions(catSnap.data() as Record<string, string[]>);
+        }
+      } catch (err) {
+        console.error("Failed to load categories", err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -235,6 +250,19 @@ export default function EditProduct() {
         images: uploadedImages,
         updatedAt: serverTimestamp(),
       });
+
+      // Auto-save new subCategory
+      if (subCategory) {
+        const trimmedSub = subCategory.trim();
+        const currentOptions = subCategoryOptions[category] || [];
+        if (!currentOptions.includes(trimmedSub)) {
+          const newOptions = { 
+            ...subCategoryOptions, 
+            [category]: [...currentOptions, trimmedSub] 
+          };
+          await setDoc(doc(db, 'settings', 'categories'), newOptions);
+        }
+      }
 
       toast.success('Product updated successfully!');
       router.push('/products');

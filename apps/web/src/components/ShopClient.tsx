@@ -19,7 +19,7 @@ const COLOR_MAP: Record<string, string> = {
 const ALL_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '26', '28', '30', '32', '34', '36', '38', '40', '42', '44', '46', '48', '50'];
 const ITEMS_PER_PAGE = 12;
 
-export default function ShopClient({ initialProducts }: { initialProducts: Product[] }) {
+export default function ShopClient({ initialProducts, globalCategories }: { initialProducts: Product[], globalCategories: Record<string, string[]> }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -148,7 +148,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: Produ
                   <button onClick={() => { setSelectedCategory(cat); setSelectedSubCategory(''); }} className={`${selectedCategory === cat ? 'text-brand-accent font-bold' : 'hover:text-brand-dark'} transition-colors`}>{cat}</button>
                   {selectedCategory === cat && (
                     <ul className="pl-4 mt-2 space-y-2 border-l border-gray-100 ml-1">
-                      {(cat === 'Top' ? ['over sized shirts', 'over sized t shirts'] : cat === 'Bottom' ? ['denim', 'cargo pants', 'jeans', 'leg pants', 'skirts'] : ['hoodies', 'sweaters']).map(sub => (
+                      {(globalCategories[cat] || []).map(sub => (
                         <li key={sub}>
                           <button onClick={() => setSelectedSubCategory(sub)} className={`text-xs capitalize ${selectedSubCategory === sub ? 'text-brand-accent font-bold' : 'text-gray-500 hover:text-brand-dark'} transition-colors`}>
                             {sub}

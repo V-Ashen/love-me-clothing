@@ -22,6 +22,14 @@ export default function SettingsPage() {
   const [instagramUrl, setInstagramUrl] = useState('');
   const [tiktokUrl, setTiktokUrl] = useState('');
 
+  // Categories
+  const [subCategoryOptions, setSubCategoryOptions] = useState<Record<string, string[]>>({
+    Top: ['over sized shirts', 'over sized t shirts'],
+    Bottom: ['denim', 'cargo pants', 'jeans', 'leg pants', 'skirts'],
+    Outerwear: ['hoodies', 'sweaters']
+  });
+  const [newSubCategory, setNewSubCategory] = useState<Record<string, string>>({ Top: '', Bottom: '', Outerwear: '' });
+
   useEffect(() => {
     fetchSettings();
   }, []);
@@ -40,6 +48,13 @@ export default function SettingsPage() {
         setFacebookUrl(data.facebookUrl || '');
         setInstagramUrl(data.instagramUrl || '');
         setTiktokUrl(data.tiktokUrl || '');
+      }
+
+      const catRef = doc(db, 'settings', 'categories');
+      const catSnap = await getDoc(catRef);
+      if (catSnap.exists()) {
+        const catData = catSnap.data() as Record<string, string[]>;
+        setSubCategoryOptions(catData);
       }
     } catch (err) {
       console.error("Failed to load settings", err);
@@ -64,6 +79,10 @@ export default function SettingsPage() {
         tiktokUrl,
         updatedAt: new Date().getTime()
       }, { merge: true });
+
+      // Save categories
+      await setDoc(doc(db, 'settings', 'categories'), subCategoryOptions);
+
       toast.success('Settings saved successfully!');
     } catch (err) {
       console.error("Failed to save settings", err);
@@ -71,6 +90,25 @@ export default function SettingsPage() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleAddSubCategory = (category: string) => {
+    const val = newSubCategory[category]?.trim();
+    if (!val) return;
+    setSubCategoryOptions(prev => {
+      const current = prev[category] || [];
+      if (current.includes(val)) return prev;
+      return { ...prev, [category]: [...current, val] };
+    });
+    setNewSubCategory(prev => ({ ...prev, [category]: '' }));
+  };
+
+  const handleRemoveSubCategory = (category: string, sub: string) => {
+    if (!confirm(`Are you sure you want to remove "${sub}" from ${category}?`)) return;
+    setSubCategoryOptions(prev => {
+      const current = prev[category] || [];
+      return { ...prev, [category]: current.filter(s => s !== sub) };
+    });
   };
 
   if (loading) {
@@ -174,6 +212,64 @@ export default function SettingsPage() {
                 className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-medium"
               />
             </div>
+          </div>
+        </div>
+
+        {/* Category Management */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 21H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h5l2 3h9a2 2 0 0 1 2 2v2"></path><path d="M19 15v6"></path><path d="M16 18h6"></path></svg>
+            </div>
+            <h2 className="text-xl font-bold text-gray-900">Manage Subcategories</h2>
+          </div>
+          <p className="text-sm text-gray-500 mb-6">These subcategories will appear in the dropdowns when adding or editing products.</p>
+          
+          <div className="space-y-8">
+            {['Top', 'Bottom', 'Outerwear'].map((cat) => (
+              <div key={cat} className="border border-gray-100 rounded-xl p-6 bg-gray-50/50">
+                <h3 className="font-bold text-gray-900 mb-4">{cat} Subcategories</h3>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {(subCategoryOptions[cat] || []).map(sub => (
+                    <div key={sub} className="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1.5 rounded-full text-sm font-medium shadow-sm">
+                      <span>{sub}</span>
+                      <button 
+                        type="button" 
+                        onClick={() => handleRemoveSubCategory(cat, sub)}
+                        className="text-gray-400 hover:text-red-500 transition-colors"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                      </button>
+                    </div>
+                  ))}
+                  {(!subCategoryOptions[cat] || subCategoryOptions[cat].length === 0) && (
+                    <span className="text-sm text-gray-400 italic py-1.5">No subcategories yet.</span>
+                  )}
+                </div>
+                <div className="flex gap-2 max-w-sm">
+                  <input 
+                    type="text" 
+                    value={newSubCategory[cat] || ''}
+                    onChange={(e) => setNewSubCategory(prev => ({ ...prev, [cat]: e.target.value }))}
+                    placeholder="New subcategory..."
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddSubCategory(cat);
+                      }
+                    }}
+                    className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black"
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => handleAddSubCategory(cat)}
+                    className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-black transition-colors"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

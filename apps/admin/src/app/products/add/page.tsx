@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { db } from 'shared';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, getDoc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useAdminStore } from '../../../lib/store';
@@ -37,11 +37,26 @@ export default function AddProduct() {
   const router = useRouter();
   const setTaskActive = useAdminStore((state) => state.setTaskActive);
 
-  const subCategoryOptions: Record<string, string[]> = {
+  const [subCategoryOptions, setSubCategoryOptions] = useState<Record<string, string[]>>({
     Top: ['over sized shirts', 'over sized t shirts'],
     Bottom: ['denim', 'cargo pants', 'jeans', 'leg pants', 'skirts'],
     Outerwear: ['hoodies', 'sweaters']
-  };
+  });
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const catRef = doc(db, 'settings', 'categories');
+        const catSnap = await getDoc(catRef);
+        if (catSnap.exists()) {
+          setSubCategoryOptions(catSnap.data() as Record<string, string[]>);
+        }
+      } catch (err) {
+        console.error("Failed to load categories", err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   // When category changes, reset selected sizes
   useEffect(() => {
@@ -171,6 +186,19 @@ export default function AddProduct() {
         images: uploadedImages,
         createdAt: serverTimestamp(),
       });
+
+      // Auto-save new subCategory
+      if (subCategory) {
+        const trimmedSub = subCategory.trim();
+        const currentOptions = subCategoryOptions[category] || [];
+        if (!currentOptions.includes(trimmedSub)) {
+          const newOptions = { 
+            ...subCategoryOptions, 
+            [category]: [...currentOptions, trimmedSub] 
+          };
+          await setDoc(doc(db, 'settings', 'categories'), newOptions);
+        }
+      }
 
       toast.success('Product created successfully!');
       router.push('/products');
