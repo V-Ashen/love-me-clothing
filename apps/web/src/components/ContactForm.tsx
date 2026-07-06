@@ -51,7 +51,7 @@ export default function ContactForm() {
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300" 
-            placeholder="Jane" 
+            placeholder="First Name" 
             required 
             disabled={loading}
           />
@@ -63,7 +63,7 @@ export default function ContactForm() {
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300" 
-            placeholder="Doe" 
+            placeholder="Last Name" 
             required 
             disabled={loading}
           />
@@ -76,7 +76,7 @@ export default function ContactForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300" 
-          placeholder="jane@example.com" 
+          placeholder="[EMAIL_ADDRESS]" 
           required 
           disabled={loading}
         />
