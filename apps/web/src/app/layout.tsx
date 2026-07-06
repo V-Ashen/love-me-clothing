@@ -8,7 +8,7 @@ import TrackingPixels from "../components/TrackingPixels";
 
 export const metadata: Metadata = {
   title: "Love Me Clothing | Official Store",
-  description: "Your favorite fashion destination",
+  description: "Your Favorite Fashion Destination",
 };
 
 export default function RootLayout({
