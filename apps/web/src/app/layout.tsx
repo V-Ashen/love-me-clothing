@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 import TrackingPixels from "../components/TrackingPixels";
 
 export const metadata: Metadata = {
-  title: "Love Me Clothing | E-Commerce",
+  title: "Love Me Clothing | Official Store",
   description: "Your favorite fashion destination",
 };
 
