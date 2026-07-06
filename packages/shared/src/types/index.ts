@@ -61,6 +61,8 @@ export interface Product {
   status?: 'ACTIVE' | 'DRAFT';
   images: { publicId: string; url: string }[]; // Default images or legacy images
   tags?: string[];
+  createdAt?: any;
+  updatedAt?: any;
 }
 
 export interface OrderCartItem {

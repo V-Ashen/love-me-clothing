@@ -207,20 +207,32 @@ export default function ShopClient({ initialProducts }: { initialProducts: Produ
         <div className="flex-1 flex flex-col">
           
           {/* Top Bar (Results count & Sort) */}
-          <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-4 border-b border-gray-100">
             <span className="text-sm font-medium text-gray-500">Showing {filteredProducts.length} Results</span>
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-bold text-gray-900 uppercase tracking-widest text-xs hidden sm:block">Sort By</span>
-              <select 
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-white border border-gray-200 text-sm font-medium text-gray-700 rounded-full px-4 py-2 outline-none focus:border-brand-dark cursor-pointer appearance-none pr-10 relative"
-                style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")', backgroundPosition: 'right 0.75rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1em 1em' }}
+            
+            <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-end">
+              <Link 
+                href="/track-order" 
+                className="group relative flex items-center justify-center gap-2 bg-gradient-to-r from-brand-dark to-gray-800 text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
-                <option value="newest">Newest First</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-              </select>
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="relative z-10"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
+                <span className="relative z-10">Track Order</span>
+              </Link>
+
+              <div className="flex items-center gap-2 sm:gap-3">
+                <span className="text-sm font-bold text-gray-900 uppercase tracking-widest text-xs hidden md:block">Sort By</span>
+                <select 
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as any)}
+                  className="bg-white border border-gray-200 text-sm font-medium text-gray-700 rounded-full px-4 py-2 outline-none focus:border-brand-dark cursor-pointer appearance-none pr-10 relative"
+                  style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")', backgroundPosition: 'right 0.75rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1em 1em' }}
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                </select>
+              </div>
             </div>
           </div>
 

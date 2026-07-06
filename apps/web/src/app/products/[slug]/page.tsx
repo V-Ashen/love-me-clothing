@@ -53,6 +53,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <ProductDetailsClient product={product} relatedProducts={relatedProducts} />
+    <ProductDetailsClient 
+      product={JSON.parse(JSON.stringify(product))} 
+      relatedProducts={JSON.parse(JSON.stringify(relatedProducts))} 
+    />
   );
 }

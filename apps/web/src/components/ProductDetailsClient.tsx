@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react';
 import { Product } from 'shared';
 import Image from 'next/image';
 import { useCart } from '../lib/hooks/useCart';
+import { useWishlist } from '../lib/hooks/useWishlist';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
@@ -15,7 +16,9 @@ const COLOR_MAP: Record<string, string> = {
 
 export default function ProductDetailsClient({ product, relatedProducts }: { product: Product, relatedProducts?: Product[] }) {
   const { addItem, openCart } = useCart();
+  const { wishlist, toggleWishlist } = useWishlist();
   const router = useRouter();
+  const isWished = product.id ? wishlist.includes(product.id) : false;
   const hasColors = product.colors && product.colors.length > 0;
   const hasSizes = product.sizes && product.sizes.length > 0;
   
@@ -77,6 +80,23 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
     openCart();
   };
 
+  const handleBuyNow = () => {
+    if (hasColors && !selectedColor) return toast.error('Please select a color');
+    if (hasSizes && !selectedSize) return toast.error('Please select a size');
+    if (currentStock < quantity) return toast.error('Not enough stock available');
+
+    addItem({
+      productId: product.id!,
+      name: product.name,
+      price: discountedPrice,
+      originalPrice: basePrice,
+      quantity,
+      image: activeImage || product.images?.[0]?.url,
+      variant: { size: selectedSize, color: selectedColor }
+    });
+    router.push('/checkout');
+  };
+
   return (
     <div className="container mx-auto px-6 lg:px-12 pt-32 pb-12 max-w-[1400px]">
       <button 
@@ -102,17 +122,6 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
             ) : (
               <div className="text-gray-400 font-medium">No Image Available</div>
             )}
-          </div>
-          
-          {/* Thumbnails (Mocked to 3 for the design, usually mapped from product.colorImages[selectedColor].images) */}
-          <div className="grid grid-cols-3 gap-4">
-            {[1,2,3].map((idx) => (
-              <div key={idx} className="relative aspect-[4/3] bg-[#F8F9FA] rounded-xl overflow-hidden border border-gray-100 cursor-pointer hover:border-gray-300 transition-colors">
-                {activeImage && (
-                  <Image src={activeImage} alt={`Thumbnail ${idx}`} fill className="object-contain p-4 mix-blend-multiply" />
-                )}
-              </div>
-            ))}
           </div>
         </div>
 
@@ -216,11 +225,22 @@ export default function ProductDetailsClient({ product, relatedProducts }: { pro
 
           {/* Action Links */}
           <div className="flex gap-4 mb-8">
-            <button className="flex-1 h-14 rounded-full border border-gray-200 bg-white font-bold text-sm text-gray-900 hover:bg-gray-50 transition-colors shadow-sm">
+            <button 
+              onClick={handleBuyNow}
+              disabled={currentStock <= 0}
+              className="flex-1 h-14 rounded-full border border-gray-200 bg-white font-bold text-sm text-gray-900 hover:bg-gray-50 transition-colors shadow-sm disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
+            >
               Buy This Now
             </button>
-            <button className="flex-1 h-14 rounded-full border border-gray-200 bg-white font-bold text-sm text-gray-900 hover:bg-gray-50 transition-colors shadow-sm">
-              Add to Wishlist
+            <button 
+              onClick={() => product.id && toggleWishlist(product.id)}
+              className={`flex-1 h-14 rounded-full border border-gray-200 font-bold text-sm transition-colors shadow-sm ${
+                isWished 
+                  ? 'bg-red-50 text-red-600 hover:bg-red-100 border-red-200' 
+                  : 'bg-white text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              {isWished ? 'Remove from Wishlist' : 'Add to Wishlist'}
             </button>
           </div>
           

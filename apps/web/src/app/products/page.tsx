@@ -16,11 +16,7 @@ export default async function ShopPage() {
   try {
     // Fetch all active products
     // We will do filtering and pagination on the client side for a snappy experience
-    const q = query(
-      collection(db, 'products'),
-      where('status', '==', 'ACTIVE')
-      // Note: we fetch all and sort on client to allow dynamic sorting (price, newest, etc)
-    );
+    const q = query(collection(db, 'products'));
     
     const querySnapshot = await getDocs(q);
     products = querySnapshot.docs.map(doc => {
@@ -31,7 +27,7 @@ export default async function ShopPage() {
         createdAt: data.createdAt?.toMillis ? data.createdAt.toMillis() : null,
         updatedAt: data.updatedAt?.toMillis ? data.updatedAt.toMillis() : null
       };
-    }) as Product[];
+    }).filter((p: any) => p.status !== 'DRAFT') as unknown as Product[];
     
     // Sort by createdAt descending initially so newest is first by default
     products.sort((a, b) => {
@@ -46,7 +42,7 @@ export default async function ShopPage() {
 
   return (
     <main className="min-h-screen bg-brand-light pt-32 pb-24">
-      <ShopClient initialProducts={products} />
+      <ShopClient initialProducts={JSON.parse(JSON.stringify(products))} />
     </main>
   );
 }

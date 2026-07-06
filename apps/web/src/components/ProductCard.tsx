@@ -56,6 +56,11 @@ export default function ProductCard({ product, isBestSeller = false }: ProductCa
           </div>
 
           <div className="flex flex-col gap-2 items-end pointer-events-auto">
+            {isBestSeller && (
+              <span className="bg-yellow-500 text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm">
+                Best Seller
+              </span>
+            )}
             <button
               onClick={async (e) => {
                 e.preventDefault();
@@ -64,7 +69,7 @@ export default function ProductCard({ product, isBestSeller = false }: ProductCa
                   await toggleWishlist(product.id);
                 }
               }}
-              className="bg-white/90 backdrop-blur text-gray-400 p-2 rounded-full shadow-sm hover:text-red-500 hover:scale-110 transition-all z-30"
+              className="bg-white/90 backdrop-blur text-gray-400 p-2 rounded-full shadow-sm hover:text-red-500 lg:hover:scale-110 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 z-30"
               aria-label="Toggle Wishlist"
             >
               <svg 
@@ -81,11 +86,6 @@ export default function ProductCard({ product, isBestSeller = false }: ProductCa
                 <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
               </svg>
             </button>
-            {isBestSeller && (
-              <span className="bg-yellow-500 text-white text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm">
-                Best Seller
-              </span>
-            )}
           </div>
         </div>
         

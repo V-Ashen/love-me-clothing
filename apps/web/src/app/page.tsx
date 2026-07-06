@@ -9,7 +9,7 @@ export const revalidate = 60;
 
 export default async function HomePage() {
   const querySnapshot = await getDocs(collection(db, 'products'));
-  const products = querySnapshot.docs.map(doc => {
+  const products = JSON.parse(JSON.stringify(querySnapshot.docs.map(doc => {
     const data = doc.data();
     return {
       id: doc.id,
@@ -17,7 +17,7 @@ export default async function HomePage() {
       createdAt: data.createdAt?.toMillis ? data.createdAt.toMillis() : null,
       updatedAt: data.updatedAt?.toMillis ? data.updatedAt.toMillis() : null
     };
-  }) as Product[];
+  }).filter((p: any) => p.status !== 'DRAFT'))) as Product[];
 
   return (
     <main className="min-h-screen bg-white">
@@ -46,46 +46,46 @@ export default async function HomePage() {
         </div>
       </section>
 
-       {/* 4. Benefits / Trust Strip */}
+       {/* 1.5 Benefits / Trust Strip */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 text-gray-700">
+          <div className="group flex items-start gap-4 p-6 rounded-2xl hover:bg-gray-50 transition-all duration-300 hover:shadow-sm hover:-translate-y-1">
+            <div className="flex-shrink-0 text-gray-700 group-hover:text-brand-dark group-hover:scale-110 transition-transform duration-300">
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
             </div>
             <div>
-              <h4 className="text-base font-bold text-gray-900 mb-1">Secure Checkout</h4>
+              <h4 className="text-base font-bold text-gray-900 mb-1 group-hover:text-brand-accent transition-colors">Secure Checkout</h4>
               <p className="text-xs text-gray-500 leading-relaxed font-medium">Your payment is protected, shop with confidence.</p>
             </div>
           </div>
 
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 text-gray-700">
+          <div className="group flex items-start gap-4 p-6 rounded-2xl hover:bg-gray-50 transition-all duration-300 hover:shadow-sm hover:-translate-y-1">
+            <div className="flex-shrink-0 text-gray-700 group-hover:text-brand-dark group-hover:scale-110 transition-transform duration-300">
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
             </div>
             <div>
-              <h4 className="text-base font-bold text-gray-900 mb-1">Best Quality</h4>
+              <h4 className="text-base font-bold text-gray-900 mb-1 group-hover:text-brand-accent transition-colors">Best Quality</h4>
               <p className="text-xs text-gray-500 leading-relaxed font-medium">Experience unmatched quality in every weave and stitch.</p>
             </div>
           </div>
 
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 text-gray-700">
+          <div className="group flex items-start gap-4 p-6 rounded-2xl hover:bg-gray-50 transition-all duration-300 hover:shadow-sm hover:-translate-y-1">
+            <div className="flex-shrink-0 text-gray-700 group-hover:text-brand-dark group-hover:scale-110 transition-transform duration-300">
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
             </div>
             <div>
-              <h4 className="text-base font-bold text-gray-900 mb-1">Cash On Delivery</h4>
+              <h4 className="text-base font-bold text-gray-900 mb-1 group-hover:text-brand-accent transition-colors">Cash On Delivery</h4>
               <p className="text-xs text-gray-500 leading-relaxed font-medium">Pay when it arrives. Shopping with Cash on Delivery.</p>
             </div>
           </div>
 
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 text-gray-700">
+          <div className="group flex items-start gap-4 p-6 rounded-2xl hover:bg-gray-50 transition-all duration-300 hover:shadow-sm hover:-translate-y-1">
+            <div className="flex-shrink-0 text-gray-700 group-hover:text-brand-dark group-hover:scale-110 transition-transform duration-300">
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
             <div>
-              <h4 className="text-base font-bold text-gray-900 mb-1">Best Service</h4>
+              <h4 className="text-base font-bold text-gray-900 mb-1 group-hover:text-brand-accent transition-colors">Best Service</h4>
               <p className="text-xs text-gray-500 leading-relaxed font-medium">Your payment is protected, shop with confidence.</p>
             </div>
           </div>
@@ -101,9 +101,9 @@ export default async function HomePage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { title: "Tops", img: "/top.jpg", link: "/products?category=tops" },
-            { title: "Outerwear", img: "/outerwear.jpg", link: "/products?category=outerwear" },
-            { title: "Bottoms", img: "/bottom.jpg", link: "/products?category=bottoms" },
+            { title: "Tops", img: "/top.jpg", link: "/products?category=Top" },
+            { title: "Outerwear", img: "/outerwear.jpg", link: "/products?category=Outerwear" },
+            { title: "Bottoms", img: "/bottom.jpg", link: "/products?category=Bottom" },
           ].map((cat, i) => (
             <Link href={cat.link} key={i} className="group flex flex-col items-center">
               <div className="relative w-full aspect-[4/3] overflow-hidden mb-6 bg-gray-100">

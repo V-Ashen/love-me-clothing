@@ -3,12 +3,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../lib/hooks/useCart';
 import { useWishlist } from '../lib/hooks/useWishlist';
+import { useAuth } from '../lib/hooks/useAuth';
+import { auth } from 'shared/src/firebase/config';
+import { signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const { getTotalItems, openCart } = useCart();
   const { wishlist } = useWishlist();
+  const { user } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -28,7 +32,7 @@ export default function Navbar() {
   return (
     <>
       <header className="absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-7xl">
-        <div className="bg-black text-white rounded-full shadow-2xl h-[64px] sm:h-[72px] flex items-center justify-between px-6 md:px-10 border border-gray-800">
+        <div className="bg-black/60 text-white rounded-full shadow-2xl h-[64px] sm:h-[72px] flex items-center justify-between px-6 md:px-10 border border-gray-800">
           
           {/* Left: Hamburger (Mobile) / Navigation Links (Desktop) */}
           <div className="flex flex-1 items-center">
@@ -102,8 +106,8 @@ export default function Navbar() {
                 <Image src="/lovelogo.jpg" alt="Love Me Clothing Logo" fill className="object-contain rounded-full bg-white p-0.5" />
               </div>
               <div className="flex flex-col text-white hidden sm:flex">
-                <span className="text-[11px] font-extrabold tracking-widest leading-none uppercase">LOVE ME CLOTHING</span>
-                <span className="text-[8px] font-medium tracking-widest opacity-80 uppercase mt-0.5">Industries (Pvt) Ltd</span>
+                <span className="text-[13px] font-extrabold tracking-widest leading-none uppercase">LOVE ME CLOTHING</span>
+                <span className="text-[9px] font-medium tracking-widest opacity-80 uppercase mt-0.5">Industries (Pvt) Ltd</span>
               </div>
             </Link>
           </div>
@@ -128,9 +132,19 @@ export default function Navbar() {
               )}
             </button>
 
-            <Link href="/account" className="hidden lg:block hover:text-[#E8C222] transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </Link>
+            {user ? (
+              <button 
+                onClick={() => signOut(auth)}
+                title="Click to sign out"
+                className="hidden lg:block text-[11px] font-bold text-gray-400 bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-full tracking-wide shadow-inner truncate max-w-[150px] hover:text-white hover:bg-red-500 hover:border-red-600 transition-all cursor-pointer"
+              >
+                {user.email}
+              </button>
+            ) : (
+              <Link href="/login" className="hidden lg:block hover:text-[#E8C222] transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </Link>
+            )}
           </div>
         </div>
       </header>

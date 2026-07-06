@@ -112,7 +112,15 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl">
+    <div className="container mx-auto px-4 pt-32 pb-12 max-w-6xl relative">
+      <button 
+        onClick={() => router.back()}
+        className="mb-8 flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-brand-dark transition-colors w-fit"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Back
+      </button>
+
       <h1 className="text-3xl font-extrabold mb-8 text-brand-dark text-center uppercase tracking-widest font-serif">Checkout</h1>
       
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
@@ -136,7 +144,7 @@ export default function CheckoutPage() {
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Email Address</label>
-                <input name="email" type="email" required className="border border-gray-200 bg-gray-50 p-3 rounded-xl w-full focus:ring-2 focus:ring-brand-dark outline-none transition-all focus:bg-white" />
+                <input name="email" type="email" required defaultValue={user?.email || ''} className="border border-gray-200 bg-gray-50 p-3 rounded-xl w-full focus:ring-2 focus:ring-brand-dark outline-none transition-all focus:bg-white" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Phone Number</label>
@@ -205,11 +213,34 @@ export default function CheckoutPage() {
                 </button>
               ))}
             </div>
-            
             <div className="mt-6 text-sm text-gray-500 bg-gray-50 p-4 rounded-xl border border-gray-100">
-              {paymentMethod === 'COD' && "Pay with cash upon delivery of your order."}
-              {paymentMethod === 'Bank Transfer' && "Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account."}
-              {paymentMethod === 'Card' && "Pay securely via your credit or debit card."}
+              {paymentMethod === 'COD' && (
+                <div className="animate-in fade-in duration-300">
+                  <p>Pay with cash upon delivery of your order.</p>
+                </div>
+              )}
+              {paymentMethod === 'Bank Transfer' && (
+                <div className="animate-in fade-in duration-300">
+                  <p className="mb-4">Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account.</p>
+                  <div className="bg-white p-4 rounded-lg border border-gray-200 text-xs">
+                    <p className="font-bold text-gray-800 mb-2 uppercase tracking-widest">Bank Details</p>
+                    <p><span className="font-bold">Bank:</span> Commercial Bank of Ceylon</p>
+                    <p><span className="font-bold">Account Name:</span> Love Me Clothing</p>
+                    <p><span className="font-bold">Account Number:</span> 1234 5678 9012</p>
+                    <p><span className="font-bold">Branch:</span> Colombo 01</p>
+                  </div>
+                </div>
+              )}
+              {paymentMethod === 'Card' && (
+                <div className="animate-in fade-in duration-300 space-y-3">
+                  <p className="mb-2">Pay securely via your credit or debit card.</p>
+                  <input type="text" placeholder="Card Number (Dummy)" className="border border-gray-200 bg-white p-3 rounded-xl w-full focus:ring-2 focus:ring-brand-dark outline-none" />
+                  <div className="grid grid-cols-2 gap-3">
+                    <input type="text" placeholder="MM/YY" className="border border-gray-200 bg-white p-3 rounded-xl w-full focus:ring-2 focus:ring-brand-dark outline-none" />
+                    <input type="text" placeholder="CVV" className="border border-gray-200 bg-white p-3 rounded-xl w-full focus:ring-2 focus:ring-brand-dark outline-none" />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

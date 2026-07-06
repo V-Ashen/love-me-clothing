@@ -25,7 +25,7 @@ export default function WishlistPage() {
     const fetchProducts = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'products'));
-        const allProducts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
+        const allProducts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).filter((p: any) => p.status !== 'DRAFT') as Product[];
         setProducts(allProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -46,7 +46,15 @@ export default function WishlistPage() {
   const wishlistProducts = products.filter(p => p.id && wishlist.includes(p.id));
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-7xl">
+    <div className="container mx-auto px-4 pt-32 pb-12 max-w-7xl relative">
+      <button 
+        onClick={() => router.back()}
+        className="mb-8 flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-brand-dark transition-colors w-fit"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Back
+      </button>
+
       <h1 className="text-4xl font-extrabold text-brand-dark mb-2 text-center uppercase tracking-widest font-serif">My Wishlist</h1>
       <p className="text-center text-gray-500 mb-10 text-sm font-medium">Your favorite picks, saved for later.</p>
       
