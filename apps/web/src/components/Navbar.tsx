@@ -225,9 +225,27 @@ export default function Navbar() {
               <Link href="/contact" className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider">
                 Contact
               </Link>
-              <Link href="/account" className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider">
-                My Account
-              </Link>
+              {user ? (
+                <button 
+                  onClick={() => {
+                    signOut(auth);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-2xl font-bold text-brand-dark hover:text-red-500 transition-colors uppercase tracking-wider text-left truncate"
+                >
+                  <span className="block text-sm text-gray-500 normal-case tracking-normal mb-1">Logged in as:</span>
+                  {user.email}
+                  <span className="block text-sm text-red-500 normal-case tracking-normal mt-1">Tap to sign out</span>
+                </button>
+              ) : (
+                <Link 
+                  href="/login" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider"
+                >
+                  Login
+                </Link>
+              )}
             </nav>
 
             {/* Mobile Footer */}

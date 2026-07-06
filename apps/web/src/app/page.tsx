@@ -1,6 +1,7 @@
 import { collection, getDocs } from 'firebase/firestore';
 import { db, Product } from 'shared';
 import Link from 'next/link';
+import FeaturedCarousel from '../components/FeaturedCarousel';
 import Image from 'next/image';
 import NewArrivals from '../components/NewArrivals';
 import ProductCard from "../components/ProductCard";
@@ -123,27 +124,7 @@ export default async function HomePage() {
             <p className="text-gray-500 font-medium">Discover the products customers can't stop buying</p>
           </div>
 
-          {products.length === 0 ? (
-            <div className="text-center py-20 text-gray-500 text-lg">
-              No products available yet. Check back soon!
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {(products.some(p => p.featured) ? products.filter(p => p.featured) : products).slice(0, 4).map((product, idx) => (
-                <ProductCard key={product.id} product={product} isBestSeller={idx === 3} />
-              ))}
-            </div>
-          )}
-
-          {/* Carousel Navigation Arrows */}
-          <div className="flex justify-center gap-4 mt-12">
-            <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-black hover:border-black transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            </button>
-            <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-black hover:border-black transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
-          </div>
+          <FeaturedCarousel products={products} />
         </div>
       </section>
 

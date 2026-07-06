@@ -13,6 +13,7 @@ const AVAILABLE_PERMISSIONS: { id: Permission; label: string }[] = [
   { id: 'MANAGE_ROLES', label: 'Manage Roles' },
   { id: 'VIEW_MESSAGES', label: 'View Messages' },
   { id: 'VIEW_SETTINGS', label: 'View Settings' },
+  { id: 'VIEW_CUSTOMERS', label: 'View Customers' },
 ];
 
 export default function RolesPage() {

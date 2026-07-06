@@ -42,63 +42,96 @@ export default function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">First Name</label>
+    <form onSubmit={handleSubmit} className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="relative group">
           <input 
             type="text" 
+            id="firstName"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300" 
+            className="peer w-full border-b border-gray-700 py-3 bg-transparent text-white outline-none focus:border-brand-accent transition-colors placeholder-transparent" 
             placeholder="First Name" 
             required 
             disabled={loading}
           />
+          <label 
+            htmlFor="firstName"
+            className="absolute left-0 top-3 text-gray-500 text-sm font-medium transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:-top-4 peer-focus:text-xs peer-focus:text-brand-accent peer-valid:-top-4 peer-valid:text-xs peer-valid:text-gray-400 pointer-events-none"
+          >
+            First Name
+          </label>
         </div>
-        <div>
-          <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Last Name</label>
+        <div className="relative group">
           <input 
             type="text" 
+            id="lastName"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300" 
+            className="peer w-full border-b border-gray-700 py-3 bg-transparent text-white outline-none focus:border-brand-accent transition-colors placeholder-transparent" 
             placeholder="Last Name" 
             required 
             disabled={loading}
           />
+          <label 
+            htmlFor="lastName"
+            className="absolute left-0 top-3 text-gray-500 text-sm font-medium transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:-top-4 peer-focus:text-xs peer-focus:text-brand-accent peer-valid:-top-4 peer-valid:text-xs peer-valid:text-gray-400 pointer-events-none"
+          >
+            Last Name
+          </label>
         </div>
       </div>
-      <div>
-        <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Email Address</label>
+      
+      <div className="relative group">
         <input 
           type="email" 
+          id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300" 
-          placeholder="[EMAIL_ADDRESS]" 
+          className="peer w-full border-b border-gray-700 py-3 bg-transparent text-white outline-none focus:border-brand-accent transition-colors placeholder-transparent" 
+          placeholder="Email Address" 
           required 
           disabled={loading}
         />
+        <label 
+          htmlFor="email"
+          className="absolute left-0 top-3 text-gray-500 text-sm font-medium transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:-top-4 peer-focus:text-xs peer-focus:text-brand-accent peer-valid:-top-4 peer-valid:text-xs peer-valid:text-gray-400 pointer-events-none"
+        >
+          Email Address
+        </label>
       </div>
-      <div>
-        <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Message</label>
+
+      <div className="relative group">
         <textarea 
+          id="message"
           rows={4} 
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full border-b-2 border-gray-200 py-3 bg-transparent outline-none focus:border-brand-dark transition-colors placeholder-gray-300 resize-none" 
-          placeholder="How can we help you?" 
+          className="peer w-full border-b border-gray-700 py-3 bg-transparent text-white outline-none focus:border-brand-accent transition-colors placeholder-transparent resize-none" 
+          placeholder="Your Message" 
           required
           disabled={loading}
         ></textarea>
+        <label 
+          htmlFor="message"
+          className="absolute left-0 top-3 text-gray-500 text-sm font-medium transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base peer-focus:-top-4 peer-focus:text-xs peer-focus:text-brand-accent peer-valid:-top-4 peer-valid:text-xs peer-valid:text-gray-400 pointer-events-none"
+        >
+          Your Message
+        </label>
       </div>
+
       <button 
         type="submit" 
         disabled={loading}
-        className="w-full bg-black text-white font-bold uppercase tracking-widest text-sm py-4 rounded-full hover:bg-brand-accent transition-colors mt-4 disabled:opacity-50"
+        className="group relative w-full bg-white text-black font-bold uppercase tracking-widest text-sm py-5 rounded-full overflow-hidden transition-all mt-8 disabled:opacity-50 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]"
       >
-        {loading ? 'Sending...' : 'Send Message'}
+        <div className="absolute inset-0 bg-brand-accent transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+        <span className="relative z-10 flex items-center justify-center gap-2">
+          {loading ? 'Sending...' : 'Send Message'}
+          {!loading && (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          )}
+        </span>
       </button>
     </form>
   );

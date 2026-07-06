@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { db, auth } from 'shared/src/firebase/config';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import Image from 'next/image';
 import { useAuth } from '../../lib/hooks/useAuth';
@@ -69,7 +69,14 @@ export default function CheckoutPage() {
       // 1. Create account if requested
       if (createAccount && !user) {
         try {
-          await createUserWithEmailAndPassword(auth, customerDetails.email, password);
+          const userCredential = await createUserWithEmailAndPassword(auth, customerDetails.email, password);
+          await setDoc(doc(db, 'users', userCredential.user.uid), {
+            uid: userCredential.user.uid,
+            email: userCredential.user.email,
+            firstName: customerDetails.firstName,
+            lastName: customerDetails.lastName,
+            role: 'customer'
+          });
           toast.success("Account created successfully!");
         } catch (error: any) {
           toast.error("Failed to create account: " + error.message);

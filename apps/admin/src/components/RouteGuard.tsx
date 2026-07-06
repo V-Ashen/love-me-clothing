@@ -93,6 +93,7 @@ export default function RouteGuard({ children }: { children: React.ReactNode }) 
           else if (pathname.includes('/roles') && perms.includes('MANAGE_ROLES')) allowed = true;
           else if (pathname.includes('/messages') && perms.includes('VIEW_MESSAGES')) allowed = true;
           else if (pathname.includes('/settings') && perms.includes('VIEW_SETTINGS')) allowed = true;
+          else if (pathname.includes('/customers') && perms.includes('VIEW_CUSTOMERS')) allowed = true;
 
           if (allowed) {
             setHasAccess(true);

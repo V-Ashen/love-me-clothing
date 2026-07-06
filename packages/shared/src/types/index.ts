@@ -1,6 +1,6 @@
 export type Role = 'admin' | 'staff' | 'customer';
 
-export type Permission = 'VIEW_DASHBOARD' | 'MANAGE_ORDERS' | 'MANAGE_PRODUCTS' | 'MANAGE_STAFF' | 'MANAGE_ROLES' | 'VIEW_MESSAGES' | 'VIEW_SETTINGS';
+export type Permission = 'VIEW_DASHBOARD' | 'MANAGE_ORDERS' | 'MANAGE_PRODUCTS' | 'MANAGE_STAFF' | 'MANAGE_ROLES' | 'VIEW_MESSAGES' | 'VIEW_SETTINGS' | 'VIEW_CUSTOMERS';
 
 export interface CustomRole {
   id?: string;
