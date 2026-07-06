@@ -1,3 +1,4 @@
+import React, { Suspense } from 'react';
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { db, Product } from 'shared';
 import ShopClient from '../../components/ShopClient';
@@ -42,7 +43,9 @@ export default async function ShopPage() {
 
   return (
     <main className="min-h-screen bg-brand-light pt-32 pb-24">
-      <ShopClient initialProducts={JSON.parse(JSON.stringify(products))} />
+      <Suspense fallback={<div className="flex justify-center items-center h-64">Loading shop...</div>}>
+        <ShopClient initialProducts={JSON.parse(JSON.stringify(products))} />
+      </Suspense>
     </main>
   );
 }
