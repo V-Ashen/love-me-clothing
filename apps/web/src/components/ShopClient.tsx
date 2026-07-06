@@ -23,21 +23,16 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Filter States
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>('');
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-  
-  // Sort State
   const [sortBy, setSortBy] = useState<'newest' | 'price-low' | 'price-high'>('newest');
   
-  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
-  // Initialize from URL params
   useEffect(() => {
     const cat = searchParams.get('category');
     const subCat = searchParams.get('subCategory');
@@ -45,25 +40,18 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
     if (subCat) setSelectedSubCategory(subCat);
   }, [searchParams]);
 
-  // Reset pagination when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, selectedCategory, selectedSubCategory, selectedColors, selectedSizes, sortBy]);
 
-  // Filter Logic
   const filteredProducts = useMemo(() => {
     return initialProducts.filter(p => {
-      // Search
       if (searchQuery && !p.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-      // Category
       if (selectedCategory && p.category !== selectedCategory) return false;
-      // SubCategory
       if (selectedSubCategory && p.subCategory !== selectedSubCategory) return false;
-      // Colors
       if (selectedColors.length > 0) {
         if (!p.colors || !p.colors.some(c => selectedColors.includes(c))) return false;
       }
-      // Sizes
       if (selectedSizes.length > 0) {
         if (!p.sizes || !p.sizes.some(s => selectedSizes.includes(s))) return false;
       }
@@ -72,14 +60,12 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
       const getPrice = (prod: Product) => prod.discountPercentage ? prod.price * (1 - prod.discountPercentage / 100) : prod.price;
       if (sortBy === 'price-low') return getPrice(a) - getPrice(b);
       if (sortBy === 'price-high') return getPrice(b) - getPrice(a);
-      // Newest is default (already sorted from server, but we re-apply just in case)
       const timeA = typeof a.createdAt === 'number' ? a.createdAt : (a.createdAt?.toMillis ? a.createdAt.toMillis() : 0);
       const timeB = typeof b.createdAt === 'number' ? b.createdAt : (b.createdAt?.toMillis ? b.createdAt.toMillis() : 0);
       return timeB - timeA;
     });
   }, [initialProducts, searchQuery, selectedCategory, selectedSubCategory, selectedColors, selectedSizes, sortBy]);
 
-  // Pagination Logic
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
   const currentProducts = filteredProducts.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -92,7 +78,7 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
     setSelectedSubCategory('');
     setSelectedColors([]);
     setSelectedSizes([]);
-    router.replace('/products'); // clear URL params
+    router.replace('/products');
   };
 
   const toggleColor = (color: string) => {
@@ -104,13 +90,13 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
   };
 
   return (
-    <div className="container mx-auto px-6 lg:px-12">
+    <div className="container mx-auto px-6 lg:px-12 text-white">
       
       {/* Header & Mobile Toggle */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-        <h1 className="text-4xl font-extrabold text-brand-dark uppercase tracking-widest">Shop All</h1>
+        <h1 className="text-4xl font-extrabold text-white uppercase tracking-widest">Shop All</h1>
         <button 
-          className="md:hidden w-full bg-brand-dark text-white py-3 rounded-full font-bold uppercase tracking-widest text-sm"
+          className="md:hidden w-full bg-white text-black hover:bg-gray-200 transition-colors py-3 rounded-full font-bold uppercase tracking-widest text-sm"
           onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
         >
           {isMobileFiltersOpen ? 'Hide Filters' : 'Show Filters'}
@@ -130,27 +116,27 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
                 placeholder="Search products..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white border border-gray-200 rounded-full py-3 px-5 text-sm outline-none focus:border-brand-dark transition-colors"
+                className="w-full bg-[#111] border border-gray-800 text-white rounded-full py-3 px-5 text-sm outline-none focus:border-brand-accent transition-colors placeholder-gray-500"
               />
-              <svg xmlns="http://www.w3.org/2000/svg" className="absolute right-4 top-3 text-gray-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" className="absolute right-4 top-3 text-gray-500" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             </div>
           </div>
 
           {/* Categories */}
           <div>
-            <h3 className="font-bold text-brand-dark uppercase tracking-widest text-sm mb-4 border-b border-gray-100 pb-2">Category</h3>
-            <ul className="space-y-3 text-sm text-gray-600 font-medium">
+            <h3 className="font-bold text-white uppercase tracking-widest text-sm mb-4 border-b border-gray-800 pb-2">Category</h3>
+            <ul className="space-y-3 text-sm text-gray-400 font-medium">
               <li>
-                <button onClick={() => { setSelectedCategory(''); setSelectedSubCategory(''); }} className={`${!selectedCategory ? 'text-brand-accent font-bold' : 'hover:text-brand-dark'} transition-colors`}>All Categories</button>
+                <button onClick={() => { setSelectedCategory(''); setSelectedSubCategory(''); }} className={`${!selectedCategory ? 'text-brand-accent font-bold' : 'hover:text-white'} transition-colors`}>All Categories</button>
               </li>
               {['Top', 'Bottom', 'Outerwear'].map(cat => (
                 <li key={cat}>
-                  <button onClick={() => { setSelectedCategory(cat); setSelectedSubCategory(''); }} className={`${selectedCategory === cat ? 'text-brand-accent font-bold' : 'hover:text-brand-dark'} transition-colors`}>{cat}</button>
+                  <button onClick={() => { setSelectedCategory(cat); setSelectedSubCategory(''); }} className={`${selectedCategory === cat ? 'text-brand-accent font-bold' : 'hover:text-white'} transition-colors`}>{cat}</button>
                   {selectedCategory === cat && (
-                    <ul className="pl-4 mt-2 space-y-2 border-l border-gray-100 ml-1">
+                    <ul className="pl-4 mt-2 space-y-2 border-l border-gray-800 ml-1">
                       {(globalCategories[cat] || []).map(sub => (
                         <li key={sub}>
-                          <button onClick={() => setSelectedSubCategory(sub)} className={`text-xs capitalize ${selectedSubCategory === sub ? 'text-brand-accent font-bold' : 'text-gray-500 hover:text-brand-dark'} transition-colors`}>
+                          <button onClick={() => setSelectedSubCategory(sub)} className={`text-xs capitalize ${selectedSubCategory === sub ? 'text-brand-accent font-bold' : 'text-gray-500 hover:text-gray-300'} transition-colors`}>
                             {sub}
                           </button>
                         </li>
@@ -164,13 +150,13 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
 
           {/* Colors */}
           <div>
-            <h3 className="font-bold text-brand-dark uppercase tracking-widest text-sm mb-4 border-b border-gray-100 pb-2">Color</h3>
+            <h3 className="font-bold text-white uppercase tracking-widest text-sm mb-4 border-b border-gray-800 pb-2">Color</h3>
             <div className="flex flex-wrap gap-2">
               {PREDEFINED_COLORS.map(color => (
                 <button 
                   key={color}
                   onClick={() => toggleColor(color)}
-                  className={`w-8 h-8 rounded-full border-2 transition-transform ${selectedColors.includes(color) ? 'border-brand-dark scale-110 shadow-sm' : 'border-gray-200 hover:scale-105'}`}
+                  className={`w-8 h-8 rounded-full border-2 transition-transform ${selectedColors.includes(color) ? 'border-brand-accent scale-110 shadow-sm' : 'border-gray-700 hover:scale-105'}`}
                   style={{ background: COLOR_MAP[color] || '#CCC' }}
                   title={color}
                 />
@@ -180,13 +166,13 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
 
           {/* Sizes */}
           <div>
-            <h3 className="font-bold text-brand-dark uppercase tracking-widest text-sm mb-4 border-b border-gray-100 pb-2">Size</h3>
+            <h3 className="font-bold text-white uppercase tracking-widest text-sm mb-4 border-b border-gray-800 pb-2">Size</h3>
             <div className="flex flex-wrap gap-2">
               {ALL_SIZES.map(size => (
                 <button 
                   key={size}
                   onClick={() => toggleSize(size)}
-                  className={`px-3 py-1.5 border rounded text-xs font-bold transition-colors ${selectedSizes.includes(size) ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'}`}
+                  className={`px-3 py-1.5 border rounded text-xs font-bold transition-colors ${selectedSizes.includes(size) ? 'bg-brand-accent text-black border-brand-accent' : 'bg-transparent text-gray-400 border-gray-800 hover:border-gray-500 hover:text-white'}`}
                 >
                   {size}
                 </button>
@@ -197,7 +183,7 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
           {/* Clear Filters */}
           <button 
             onClick={clearFilters}
-            className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs uppercase tracking-widest rounded-full transition-colors"
+            className="w-full py-3 bg-[#111] hover:bg-[#222] text-gray-300 font-bold text-xs uppercase tracking-widest rounded-full transition-colors border border-gray-800 hover:border-gray-600"
           >
             Clear All Filters
           </button>
@@ -207,25 +193,25 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
         <div className="flex-1 flex flex-col">
           
           {/* Top Bar (Results count & Sort) */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-4 border-b border-gray-100">
-            <span className="text-sm font-medium text-gray-500">Showing {filteredProducts.length} Results</span>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-4 border-b border-gray-800">
+            <span className="text-sm font-medium text-gray-400">Showing {filteredProducts.length} Results</span>
             
             <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-end">
               <Link 
                 href="/track-order" 
-                className="group relative flex items-center justify-center gap-2 bg-gradient-to-r from-brand-dark to-gray-800 text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="group relative flex items-center justify-center gap-2 bg-gradient-to-r from-gray-800 to-gray-900 text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full overflow-hidden shadow-md hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-300 hover:scale-105 border border-gray-700"
               >
-                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="relative z-10"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
                 <span className="relative z-10">Track Order</span>
               </Link>
 
               <div className="flex items-center gap-2 sm:gap-3">
-                <span className="text-sm font-bold text-gray-900 uppercase tracking-widest text-xs hidden md:block">Sort By</span>
+                <span className="text-sm font-bold text-gray-300 uppercase tracking-widest text-xs hidden md:block">Sort By</span>
                 <select 
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="bg-white border border-gray-200 text-sm font-medium text-gray-700 rounded-full px-4 py-2 outline-none focus:border-brand-dark cursor-pointer appearance-none pr-10 relative"
+                  className="bg-[#111] border border-gray-800 text-sm font-medium text-white rounded-full px-4 py-2 outline-none focus:border-brand-accent cursor-pointer appearance-none pr-10 relative"
                   style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")', backgroundPosition: 'right 0.75rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1em 1em' }}
                 >
                   <option value="newest">Newest First</option>
@@ -240,64 +226,51 @@ export default function ShopClient({ initialProducts, globalCategories }: { init
           {currentProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
               {currentProducts.map(product => {
-                const isDiscounted = !!product.discountPercentage && product.discountPercentage > 0;
-                const discountedPrice = isDiscounted 
-                  ? product.price * (1 - (product.discountPercentage! / 100)) 
-                  : product.price;
-
                 return (
                   <ProductCard key={product.id} product={product} />
                 );
               })}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-32 bg-white rounded-3xl border border-gray-100 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 mb-6"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              <h3 className="text-2xl font-bold text-brand-dark mb-2">No Products Found</h3>
-              <p className="text-gray-500 font-medium max-w-md text-center mb-8">We couldn't find any products matching your current filters. Try removing some filters or searching for something else.</p>
-              <button onClick={clearFilters} className="bg-brand-dark text-white px-8 py-3 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-black transition-colors">Clear All Filters</button>
+            <div className="flex flex-col items-center justify-center py-20 text-center bg-[#111] rounded-[2rem] border border-gray-800 mb-12">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600 mb-4"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"/><path d="M7 3.34V5a3 3 0 0 0 3 3v0a2 2 0 0 1 2 2v0c0 1.1.9 2 2 2v0a2 2 0 0 0 2-2v0c0-1.1.9-2 2-2h1a2 2 0 0 1 2 2v0a2 2 0 0 0 2-2h1.66"/><path d="m11 21.54-1.33-2.67A2 2 0 0 1 11 17h0a2 2 0 0 1 2 2v2.54"/><path d="M3.34 7H5a2 2 0 0 1 2 2v0a2 2 0 0 0 2 2v0a2 2 0 0 1 2 2v0a2 2 0 0 0 2 2v0c0 1.1-.9 2-2 2H9.34"/><path d="M21.54 9H19a2 2 0 0 0-2 2v0a2 2 0 0 1-2 2v0a2 2 0 0 0-2 2v0a2 2 0 0 1-2 2v0a2 2 0 0 0-2 2h-1.66"/><circle cx="12" cy="12" r="10"/></svg>
+              <h3 className="text-xl font-bold text-white mb-2">No products found</h3>
+              <p className="text-gray-400 mb-6">Try adjusting your filters or search query.</p>
+              <button onClick={clearFilters} className="bg-white text-black px-8 py-3 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-brand-accent transition-colors">
+                Clear Filters
+              </button>
             </div>
           )}
 
-          {/* Pagination Controls */}
+          {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-auto pt-8 border-t border-gray-100">
+            <div className="flex justify-center items-center gap-2 mt-auto">
               <button 
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-600 hover:border-brand-dark hover:text-brand-dark transition-colors disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:text-gray-600"
+                className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-800 text-gray-400 hover:text-white hover:border-gray-500 disabled:opacity-30 disabled:hover:border-gray-800 disabled:hover:text-gray-400 transition-colors"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
               </button>
               
-              <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }).map((_, idx) => {
-                  const pageNumber = idx + 1;
-                  // Show limited pages logic (simple for now, show all if < 7, else truncate)
-                  if (totalPages > 7) {
-                    if (pageNumber !== 1 && pageNumber !== totalPages && Math.abs(currentPage - pageNumber) > 1) {
-                      if (pageNumber === 2 || pageNumber === totalPages - 1) return <span key={idx} className="px-1 text-gray-400">...</span>;
-                      return null;
-                    }
-                  }
-                  return (
-                    <button 
-                      key={idx}
-                      onClick={() => setCurrentPage(pageNumber)}
-                      className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-bold transition-colors ${currentPage === pageNumber ? 'bg-brand-dark text-white shadow-md' : 'text-gray-600 hover:bg-gray-100'}`}
-                    >
-                      {pageNumber}
-                    </button>
-                  );
-                })}
+              <div className="flex items-center gap-2">
+                {Array.from({length: totalPages}, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-10 h-10 rounded-full text-sm font-bold transition-colors ${currentPage === page ? 'bg-white text-black' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+                  >
+                    {page}
+                  </button>
+                ))}
               </div>
 
               <button 
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-600 hover:border-brand-dark hover:text-brand-dark transition-colors disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:text-gray-600"
+                className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-800 text-gray-400 hover:text-white hover:border-gray-500 disabled:opacity-30 disabled:hover:border-gray-800 disabled:hover:text-gray-400 transition-colors"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
               </button>
             </div>
           )}

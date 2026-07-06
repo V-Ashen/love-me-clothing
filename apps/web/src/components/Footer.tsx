@@ -31,10 +31,11 @@ export default function Footer() {
     fetchSocials();
   }, []);
   return (
-    <footer className="bg-black text-white pt-20 pb-10">
-      <div className="container mx-auto px-6 lg:px-12">
-        
-        {/* Top Section */}
+    <div className="px-4 pb-6 mt-12 max-w-[1400px] mx-auto">
+      <footer className="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl text-white pt-16 pb-8 shadow-2xl relative overflow-hidden">
+        <div className="container mx-auto px-6 lg:px-12 relative z-10">
+          
+          {/* Top Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-16">
           {/* Logo */}
           <div className="flex items-center gap-4">
@@ -89,5 +90,6 @@ export default function Footer() {
 
       </div>
     </footer>
+    </div>
   );
 }

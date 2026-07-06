@@ -62,17 +62,17 @@ export default function Navbar() {
 
                 {/* Mega Menu Dropdown */}
                 {isMegaMenuOpen && (
-                  <div className="absolute top-[60px] -left-10 w-[600px] bg-white border border-gray-100 shadow-2xl rounded-2xl p-8 grid grid-cols-3 gap-8 animate-in slide-in-from-top-2 fade-in duration-200 z-50 text-gray-900 cursor-default">
+                  <div className="absolute top-[60px] -left-10 w-[600px] bg-[#111] border border-gray-800 shadow-2xl rounded-2xl p-8 grid grid-cols-3 gap-8 animate-in slide-in-from-top-2 fade-in duration-200 z-50 text-white cursor-default">
                     <div>
-                      <h3 className="text-lg font-bold text-brand-dark mb-4 border-b pb-2">Top</h3>
-                      <ul className="space-y-3 font-medium text-gray-600">
+                      <h3 className="text-lg font-bold text-white mb-4 border-b border-gray-800 pb-2">Top</h3>
+                      <ul className="space-y-3 font-medium text-gray-400">
                         <li><Link href="/products?category=Top&subCategory=over+sized+shirts" className="hover:text-brand-accent transition-colors">Over Sized Shirts</Link></li>
                         <li><Link href="/products?category=Top&subCategory=over+sized+t+shirts" className="hover:text-brand-accent transition-colors">Over Sized T Shirts</Link></li>
                       </ul>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-brand-dark mb-4 border-b pb-2">Bottom</h3>
-                      <ul className="space-y-3 font-medium text-gray-600">
+                      <h3 className="text-lg font-bold text-white mb-4 border-b border-gray-800 pb-2">Bottom</h3>
+                      <ul className="space-y-3 font-medium text-gray-400">
                         <li><Link href="/products?category=Bottom&subCategory=denim" className="hover:text-brand-accent transition-colors">Denim</Link></li>
                         <li><Link href="/products?category=Bottom&subCategory=cargo+pants" className="hover:text-brand-accent transition-colors">Cargo Pants</Link></li>
                         <li><Link href="/products?category=Bottom&subCategory=jeans" className="hover:text-brand-accent transition-colors">Jeans</Link></li>
@@ -81,8 +81,8 @@ export default function Navbar() {
                       </ul>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-brand-dark mb-4 border-b pb-2">Outerwear</h3>
-                      <ul className="space-y-3 font-medium text-gray-600">
+                      <h3 className="text-lg font-bold text-white mb-4 border-b border-gray-800 pb-2">Outerwear</h3>
+                      <ul className="space-y-3 font-medium text-gray-400">
                         <li><Link href="/products?category=Outerwear&subCategory=hoodies" className="hover:text-brand-accent transition-colors">Hoodies</Link></li>
                         <li><Link href="/products?category=Outerwear&subCategory=sweaters" className="hover:text-brand-accent transition-colors">Sweaters</Link></li>
                       </ul>
@@ -154,17 +154,17 @@ export default function Navbar() {
         <div className="fixed inset-0 z-50 flex lg:hidden">
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-300"
+            className="fixed inset-0 bg-black/60 backdrop-blur-md animate-in fade-in duration-300"
             onClick={() => setIsMobileMenuOpen(false)}
           />
           
           {/* Sidebar Drawer */}
-          <div className="relative flex w-full max-w-sm flex-col overflow-y-auto bg-brand-light shadow-xl animate-in slide-in-from-left duration-300 ease-out">
+          <div className="relative flex w-full max-w-sm flex-col overflow-y-auto bg-[#0a0a0a] shadow-2xl border-r border-gray-800 animate-in slide-in-from-left duration-300 ease-out text-white">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-6 border-b border-gray-200">
-              <span className="text-sm font-extrabold uppercase tracking-widest text-brand-dark">Menu</span>
+            <div className="flex items-center justify-between px-6 py-6 border-b border-gray-800">
+              <span className="text-sm font-extrabold uppercase tracking-widest text-white">Menu</span>
               <button 
-                className="text-gray-500 hover:text-black p-2 -mr-2 bg-gray-100 rounded-full"
+                className="text-gray-400 hover:text-white p-2 -mr-2 bg-gray-900 rounded-full transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -173,14 +173,14 @@ export default function Navbar() {
 
             {/* Links */}
             <nav className="flex flex-col p-6 space-y-6">
-              <Link href="/" className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider">
+              <Link href="/" className="text-2xl font-bold text-white hover:text-brand-accent transition-colors uppercase tracking-wider">
                 Home
               </Link>
               
               <div>
                 <button 
                   onClick={() => setMobileShopOpen(!mobileShopOpen)}
-                  className="flex items-center justify-between w-full text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider"
+                  className="flex items-center justify-between w-full text-2xl font-bold text-white hover:text-brand-accent transition-colors uppercase tracking-wider"
                 >
                   Shop
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 ${mobileShopOpen ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6"/></svg>
@@ -189,40 +189,40 @@ export default function Navbar() {
                 {/* Mobile Shop Submenu */}
                 {mobileShopOpen && (
                   <div className="mt-4 pl-4 border-l-2 border-brand-accent space-y-6 flex flex-col animate-in slide-in-from-top-2 fade-in">
-                    <Link href="/products" className="text-lg font-bold text-brand-dark">Shop All Products</Link>
+                    <Link href="/products" className="text-lg font-bold text-white hover:text-brand-accent">Shop All Products</Link>
                     
                     <div>
-                      <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Top</p>
-                      <ul className="space-y-3 text-brand-dark font-medium">
-                        <li><Link href="/products?category=Top&subCategory=over+sized+shirts">Over Sized Shirts</Link></li>
-                        <li><Link href="/products?category=Top&subCategory=over+sized+t+shirts">Over Sized T Shirts</Link></li>
+                      <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Top</p>
+                      <ul className="space-y-3 text-gray-300 font-medium">
+                        <li><Link href="/products?category=Top&subCategory=over+sized+shirts" className="hover:text-white">Over Sized Shirts</Link></li>
+                        <li><Link href="/products?category=Top&subCategory=over+sized+t+shirts" className="hover:text-white">Over Sized T Shirts</Link></li>
                       </ul>
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Bottom</p>
-                      <ul className="space-y-3 text-brand-dark font-medium">
-                        <li><Link href="/products?category=Bottom&subCategory=denim">Denim</Link></li>
-                        <li><Link href="/products?category=Bottom&subCategory=cargo+pants">Cargo Pants</Link></li>
-                        <li><Link href="/products?category=Bottom&subCategory=jeans">Jeans</Link></li>
-                        <li><Link href="/products?category=Bottom&subCategory=leg+pants">Leg Pants</Link></li>
-                        <li><Link href="/products?category=Bottom&subCategory=skirts">Skirts</Link></li>
+                      <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Bottom</p>
+                      <ul className="space-y-3 text-gray-300 font-medium">
+                        <li><Link href="/products?category=Bottom&subCategory=denim" className="hover:text-white">Denim</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=cargo+pants" className="hover:text-white">Cargo Pants</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=jeans" className="hover:text-white">Jeans</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=leg+pants" className="hover:text-white">Leg Pants</Link></li>
+                        <li><Link href="/products?category=Bottom&subCategory=skirts" className="hover:text-white">Skirts</Link></li>
                       </ul>
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Outerwear</p>
-                      <ul className="space-y-3 text-brand-dark font-medium">
-                        <li><Link href="/products?category=Outerwear&subCategory=hoodies">Hoodies</Link></li>
-                        <li><Link href="/products?category=Outerwear&subCategory=sweaters">Sweaters</Link></li>
+                      <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Outerwear</p>
+                      <ul className="space-y-3 text-gray-300 font-medium">
+                        <li><Link href="/products?category=Outerwear&subCategory=hoodies" className="hover:text-white">Hoodies</Link></li>
+                        <li><Link href="/products?category=Outerwear&subCategory=sweaters" className="hover:text-white">Sweaters</Link></li>
                       </ul>
                     </div>
                   </div>
                 )}
               </div>
 
-              <Link href="/about" className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider">
+              <Link href="/about" className="text-2xl font-bold text-white hover:text-brand-accent transition-colors uppercase tracking-wider">
                 About
               </Link>
-              <Link href="/contact" className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider">
+              <Link href="/contact" className="text-2xl font-bold text-white hover:text-brand-accent transition-colors uppercase tracking-wider">
                 Contact
               </Link>
               {user ? (
@@ -231,7 +231,7 @@ export default function Navbar() {
                     signOut(auth);
                     setIsMobileMenuOpen(false);
                   }}
-                  className="text-2xl font-bold text-brand-dark hover:text-red-500 transition-colors uppercase tracking-wider text-left truncate"
+                  className="text-2xl font-bold text-white hover:text-red-500 transition-colors uppercase tracking-wider text-left truncate"
                 >
                   <span className="block text-sm text-gray-500 normal-case tracking-normal mb-1">Logged in as:</span>
                   {user.email}
@@ -241,7 +241,7 @@ export default function Navbar() {
                 <Link 
                   href="/login" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-2xl font-bold text-brand-dark hover:text-brand-accent transition-colors uppercase tracking-wider"
+                  className="text-2xl font-bold text-white hover:text-brand-accent transition-colors uppercase tracking-wider"
                 >
                   Login
                 </Link>
@@ -249,7 +249,7 @@ export default function Navbar() {
             </nav>
 
             {/* Mobile Footer */}
-            <div className="mt-auto p-6 border-t border-gray-200 text-xs font-bold text-gray-400 tracking-widest uppercase text-center">
+            <div className="mt-auto p-6 border-t border-gray-800 text-xs font-bold text-gray-500 tracking-widest uppercase text-center">
               © {new Date().getFullYear()} Love Me Clothing
             </div>
           </div>

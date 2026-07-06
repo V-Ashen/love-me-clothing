@@ -17,11 +17,11 @@ export default function NewArrivals({ products }: { products: Product[] }) {
   const tabs = ['All', 'Top', 'Bottom', 'Outerwear'];
 
   return (
-    <section className="bg-white py-24">
+    <section className="bg-[#0a0a0a] py-24">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="flex flex-col items-center mb-10 text-center">
-          <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-4">Our New Arrivals</h2>
-          <p className="text-gray-500 font-medium">Discover the products customers can't stop buying</p>
+          <h2 className="text-4xl md:text-5xl font-semibold text-white mb-4">Our New Arrivals</h2>
+          <p className="text-gray-400 font-medium">Discover the products customers can't stop buying</p>
         </div>
 
         {/* Filter Pills */}
@@ -30,10 +30,10 @@ export default function NewArrivals({ products }: { products: Product[] }) {
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
-              className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-colors border ${
+              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-colors border ${
                 activeTab === tab 
-                  ? 'bg-black text-white border-black' 
-                  : 'bg-gray-50 text-gray-600 border-gray-100 hover:bg-gray-100 hover:border-gray-200'
+                  ? 'bg-brand-accent text-black border-brand-accent' 
+                  : 'bg-white/5 text-gray-400 border-white/10 hover:bg-white/10 hover:border-white/20 hover:text-white'
               }`}
             >
               {tab}
@@ -62,8 +62,8 @@ export default function NewArrivals({ products }: { products: Product[] }) {
         )}
 
         <div className="text-center">
-          <Link href="/products" className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-black transition-colors group">
-            <span className="border-b-2 border-gray-200 group-hover:border-black pb-0.5 transition-colors">View All</span>
+          <Link href="/products" className="inline-flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-brand-accent transition-colors group">
+            <span className="border-b-2 border-transparent group-hover:border-brand-accent pb-0.5 transition-colors">View All</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </Link>
         </div>

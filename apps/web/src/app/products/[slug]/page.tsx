@@ -26,8 +26,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
   if (!docSnap.exists()) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <h1 className="text-2xl font-bold mb-4 text-brand-dark">Product not found.</h1>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] bg-[#0a0a0a] text-white">
+        <h1 className="text-2xl font-bold mb-4 text-white">Product not found.</h1>
         <Link href="/" className="text-brand-accent hover:underline">Return Home</Link>
       </div>
     );

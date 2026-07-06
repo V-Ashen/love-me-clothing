@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { collection, getDocs, query, where, orderBy, doc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, query, doc, getDoc } from 'firebase/firestore';
 import { db, Product } from 'shared';
 import ShopClient from '../../components/ShopClient';
 import { Metadata } from 'next';
@@ -24,8 +24,7 @@ export default async function ShopPage() {
     if (catDoc.exists()) {
       globalCategories = catDoc.data() as Record<string, string[]>;
     }
-    // Fetch all active products
-    // We will do filtering and pagination on the client side for a snappy experience
+    
     const q = query(collection(db, 'products'));
     
     const querySnapshot = await getDocs(q);
@@ -39,7 +38,6 @@ export default async function ShopPage() {
       };
     }).filter((p: any) => p.status !== 'DRAFT') as unknown as Product[];
     
-    // Sort by createdAt descending initially so newest is first by default
     products.sort((a, b) => {
       const timeA = typeof a.createdAt === 'number' ? a.createdAt : 0;
       const timeB = typeof b.createdAt === 'number' ? b.createdAt : 0;
@@ -51,8 +49,8 @@ export default async function ShopPage() {
   }
 
   return (
-    <main className="min-h-screen bg-brand-light pt-32 pb-24">
-      <Suspense fallback={<div className="flex justify-center items-center h-64">Loading shop...</div>}>
+    <main className="min-h-screen bg-[#0a0a0a] text-white pt-32 pb-24 selection:bg-brand-accent selection:text-black">
+      <Suspense fallback={<div className="flex justify-center items-center h-64 text-gray-400">Loading shop...</div>}>
         <ShopClient initialProducts={JSON.parse(JSON.stringify(products))} globalCategories={globalCategories} />
       </Suspense>
     </main>

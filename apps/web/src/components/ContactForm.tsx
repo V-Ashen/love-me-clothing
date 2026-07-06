@@ -123,10 +123,10 @@ export default function ContactForm() {
       <button 
         type="submit" 
         disabled={loading}
-        className="group relative w-full bg-white text-black font-bold uppercase tracking-widest text-sm py-5 rounded-full overflow-hidden transition-all mt-8 disabled:opacity-50 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+        className="group relative w-full bg-white text-black font-bold uppercase tracking-widest text-sm py-5 rounded-full overflow-hidden transition-all mt-8 disabled:opacity-50 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
       >
         <div className="absolute inset-0 bg-brand-accent transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
-        <span className="relative z-10 flex items-center justify-center gap-2">
+        <span className="relative z-10 flex items-center justify-center gap-2 group-hover:text-black transition-colors">
           {loading ? 'Sending...' : 'Send Message'}
           {!loading && (
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
