@@ -107,7 +107,7 @@ export default async function HomePage() {
             { title: "Bottoms", img: "/bottom.jpg", link: "/products?category=Bottom" },
           ].map((cat, i) => (
             <Link href={cat.link} key={i} className="group flex flex-col items-center">
-              <div className="relative w-full aspect-[4/3] overflow-hidden mb-6 bg-white/5 rounded-2xl">
+              <div className="relative w-full aspect-[4/3] overflow-hidden mb-6 bg-white/5 rounded-none">
                 <Image src={cat.img} alt={cat.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100 mix-blend-lighten" />
               </div>
               <span className="text-white text-lg font-semibold tracking-wide group-hover:text-brand-accent transition-colors">{cat.title}</span>

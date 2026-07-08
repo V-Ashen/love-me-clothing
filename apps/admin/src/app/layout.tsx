@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} min-h-screen bg-gray-50 font-sans antialiased flex`}>
+      <body className={`${inter.className} min-h-screen bg-gray-50 font-sans antialiased flex flex-col md:flex-row`}>
         <RouteGuard>
           <Sidebar />
           <main className="flex-1 overflow-y-auto">

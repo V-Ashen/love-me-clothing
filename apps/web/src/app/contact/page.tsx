@@ -12,7 +12,7 @@ export default function ContactPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         
         {/* Left Side: Editorial Image & Info (Sticky on Desktop) */}
-        <div className="relative h-[60vh] lg:h-screen w-full lg:sticky top-0 overflow-hidden">
+        <div className="relative min-h-[85vh] lg:h-screen w-full lg:sticky top-0 overflow-hidden flex flex-col justify-center pt-32 lg:pt-40 pb-12">
           <Image 
             src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&q=80&w=2070" 
             alt="Fashion Contact" 
@@ -20,15 +20,16 @@ export default function ContactPage() {
             priority
             className="object-cover object-center opacity-80"
           />
-          {/* Gradients */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]/50 lg:bg-gradient-to-r lg:from-transparent lg:to-[#0a0a0a]"></div>
+          {/* Gradients and Dark Overlay for better text visibility */}
+          <div className="absolute inset-0 bg-black/40 z-0"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]/50 lg:bg-gradient-to-r lg:from-transparent lg:to-[#0a0a0a] z-0"></div>
 
-          {/* Contact Details Glass Panel */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-16 lg:bottom-12 z-10 animate-in slide-in-from-bottom-8 duration-1000">
-            <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight mb-4 leading-tight text-white">
+          {/* Contact Details Panel */}
+          <div className="relative w-full p-8 lg:p-16 z-10 animate-in slide-in-from-bottom-8 duration-1000">
+            <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight mb-4 leading-tight text-white drop-shadow-xl">
               Let's <br className="hidden lg:block"/> Connect.
             </h1>
-            <p className="text-gray-400 text-lg mb-8 max-w-md font-medium">
+            <p className="text-gray-300 text-lg mb-8 max-w-md font-semibold drop-shadow-md">
               Have a question about an order, want to know more about our fabrics, or just want to say hi? We're here for you.
             </p>
 

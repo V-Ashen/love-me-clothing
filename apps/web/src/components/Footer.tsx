@@ -84,7 +84,7 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="text-left">
           <p className="text-gray-500 text-xs font-medium">
-            © 2023 . All rights reserved.
+            © 2026 . All rights reserved.
           </p>
         </div>
 
