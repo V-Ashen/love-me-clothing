@@ -34,7 +34,7 @@ export default function ProductCard({ product, isBestSeller = false }: ProductCa
 
   return (
     <Link href={`/products/${product.id}`} className="group flex flex-col h-full bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-4 hover:shadow-[0_0_30px_rgba(255,255,255,0.05)] hover:border-white/20 transition-all duration-300 relative">
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#111] mb-4 rounded-xl block">
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#111] mb-4 rounded-none block">
         
         {/* Badges Container */}
         <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-30 pointer-events-none">
