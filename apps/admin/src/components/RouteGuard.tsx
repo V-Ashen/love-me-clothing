@@ -5,6 +5,7 @@ import { auth, db, User as AppUser, CustomRole } from 'shared';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useAdminStore } from '../lib/store';
+import OrderNotifier from './OrderNotifier';
 
 export default function RouteGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -123,5 +124,10 @@ export default function RouteGuard({ children }: { children: React.ReactNode }) 
     );
   }
 
-  return hasAccess ? <>{children}</> : null;
+  return hasAccess ? (
+    <>
+      <OrderNotifier />
+      {children}
+    </>
+  ) : null;
 }

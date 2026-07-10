@@ -66,10 +66,13 @@ export default function CheckoutPage() {
     const customerDetails = Object.fromEntries(formData) as any;
 
     try {
+      let currentUserId = user ? user.uid : null;
+
       // 1. Create account if requested
       if (createAccount && !user) {
         try {
           const userCredential = await createUserWithEmailAndPassword(auth, customerDetails.email, password);
+          currentUserId = userCredential.user.uid;
           await setDoc(doc(db, 'users', userCredential.user.uid), {
             uid: userCredential.user.uid,
             email: userCredential.user.email,
@@ -92,7 +95,7 @@ export default function CheckoutPage() {
         totalAmount: finalTotal,
         shippingFee: finalShippingFee,
         paymentMethod: paymentMethod,
-        userId: user ? user.uid : null,
+        userId: currentUserId,
       };
 
       // 3. Process Dummy Payment or COD
