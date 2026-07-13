@@ -140,7 +140,7 @@ export default async function HomePage() {
                 Indulge in Our wide<br className="hidden sm:block" />leg pant Collection
               </h2>
               <p className="text-gray-400 text-sm md:text-base mb-8 sm:mb-10 leading-relaxed font-medium max-w-md mx-auto lg:mx-0">
-                Experience the perfect blend of elegance and comfort with premium fabrics crafted for those who appreciate sophistication in every detail.
+                Beyond the Trend. We believe in style that feels as incredible as it looks. Discover meticulously crafted pieces where modern design meets everyday comfort, made for the woman who owns her story.
               </p>
               <Link href="/products?category=bottoms" className="inline-block bg-white text-black px-8 py-3 rounded-full font-bold text-sm hover:bg-brand-accent transition-colors">
                 Shop Now
@@ -195,7 +195,7 @@ export default async function HomePage() {
                 Blending Tradition With Love <br className="hidden sm:block"/> For <span className="text-white">Pure Cotton</span>
               </h2>
               <p className="text-black/80 text-sm sm:text-base md:text-lg mb-8 font-medium">
-                AF Weaving creates comfort you can truly feel.
+                LMC creates comfort you can truly feel.
               </p>
               <Link href="/products" className="inline-block bg-black text-white px-10 py-3.5 rounded-full font-bold text-sm hover:bg-gray-900 transition-colors shadow-xl">
                 Shop Now
